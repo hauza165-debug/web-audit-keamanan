@@ -5,58 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Cloud File Storage (AES)</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Aplikasi Penyimpanan File Aman (AES)</h2>
-        
-        <div id="token-section">
-            <p>Masukkan Token Akses Anda untuk Masuk:</p>
-            <input type="text" id="accessToken" placeholder="Contoh Token: UAS-RAHASIA-2026">
-            <button onclick="verifyToken()">Verifikasi Token</button>
-            <p id="token-error" style="color: red; display: none;">Token Salah! Akses Ditolak.</p>
+    <div id="token-page" class="login-wrapper">
+        <div class="login-container">
+            <div class="login-left">
+                <div class="circle-badge">
+                    <span class="case-title">Case Study</span>
+                    <span class="case-sub">FILE SECURITY AES</span>
+                </div>
+                <div class="secure-badge"><i class="fa-solid fa-lock"></i> Keamanan Informasi</div>
+            </div>
+            <div class="login-right">
+                <h2>ACCESS TOKEN</h2>
+                <div class="input-box">
+                    <label>Token Akses</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="text" id="accessToken" placeholder="Masukkan token Anda">
+                    </div>
+                </div>
+                <button class="btn-main" onclick="verifyToken()">VERIFIKASI</button>
+                <p id="token-error" class="error-msg"><i class="fa-solid fa-triangle-exclamation"></i> Token Salah! Akses Ditolak.</p>
+                
+                <div class="footer-note">© 2026 Tugas Project Case Study</div>
+            </div>
         </div>
+    </div>
 
-        <div id="main-section" style="display: none;">
-            <h3>Selamat Datang di Storage Aman</h3>
-            <hr>
+    <div id="main-dashboard" style="display: none;">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fa-solid fa-shield-halved"></i> CryptSafe Cloud
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="#" onclick="switchTab('encrypt')"><i class="fa-solid fa-file-shield"></i> Enkripsi File</a></li>
+                <li><a href="#" onclick="switchTab('decrypt')"><i class="fa-solid fa-file-signature"></i> Dekripsi File</a></li>
+                <li><a href="#" class="logout-link" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a></li>
+            </ul>
+        </nav>
+
+        <div class="dashboard-container">
             
-            <div class="form-group">
-                <label>1. Pilih File yang Akan Diamankan:</label>
-                <input type="file" id="fileInput">
+            <div id="encrypt-tab" class="card-box">
+                <div class="card-header">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <h3>Enkripsi & Amankan File ke Cloud</h3>
+                </div>
+                <p class="card-desc">Pilih file apa saja (dokumen/gambar) untuk diubah menjadi format terenkripsi AES tingkat tinggi sebelum disimpan.</p>
+                
+                <div class="form-group">
+                    <label><i class="fa-solid fa-file"></i> 1. Pilih File Asli</label>
+                    <input type="file" id="fileInput">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-solid fa-lock-open"></i> 2. Kunci Rahasia AES (Password File)</label>
+                    <input type="password" id="secretKey" placeholder="Buat password pengunci file...">
+                </div>
+
+                <button class="btn-main" onclick="encryptAndSave()"><i class="fa-solid fa-user-shield"></i> Proses Enkripsi & Unduh</button>
             </div>
 
-            <div class="form-group">
-                <label>2. Masukkan Kunci Rahasia AES (Password File):</label>
-                <input type="password" id="secretKey" placeholder="Kunci AES">
+            <div id="decrypt-tab" class="card-box" style="display: none;">
+                <div class="card-header" style="background-color: #7b5043;">
+                    <i class="fa-solid fa-key"></i>
+                    <h3>Dekripsi & Buka File Aman</h3>
+                </div>
+                <p class="card-desc">Punya file berformat <strong>.enc</strong>? Masukkan kembali kunci rahasia yang tepat untuk mengembalikannya ke bentuk semula.</p>
+                
+                <div class="form-group">
+                    <label><i class="fa-solid fa-file-medical"></i> 1. Pilih File Terenkripsi (.enc)</label>
+                    <input type="file" id="encryptedFileInput">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-solid fa-unlock"></i> 2. Masukkan Kunci Rahasia AES</label>
+                    <input type="password" id="decryptSecretKey" placeholder="Masukkan password pengunci file...">
+                </div>
+
+                <button class="btn-main" style="background-color: #7b5043;" onclick="decryptFile()"><i class="fa-solid fa-unlock-keyhole"></i> Proses Dekripsi & Buka</button>
             </div>
 
-            <button onclick="encryptAndSave()">Enkripsi & Simpan File</button>
-            
-            <hr>
-            <h3>Menu Dekripsi (Buka File)</h3>
-            <div class="form-group">
-                <label>Pilih File Terenkripsi (.enc):</label>
-                <input type="file" id="encryptedFileInput">
-            </div>
-            <button onclick="decryptFile()">Dekripsi & Buka File</button>
         </div>
     </div>
 
     <script>
-        // Batasi token akses secara statis (Bisa kamu ganti sesukamu)
+        // Token akses statis untuk demo
         const VALID_TOKEN = "UAS-RAHASIA-2026";
 
         function verifyToken() {
             const input = document.getElementById('accessToken').value;
             if (input === VALID_TOKEN) {
-                document.getElementById('token-section').style.display = 'none';
-                document.getElementById('main-section').style.display = 'block';
+                document.getElementById('token-page').style.display = 'none';
+                document.getElementById('main-dashboard').style.display = 'block';
+                document.body.style.backgroundImage = 'none'; // hapus polkadot di dashboard agar bersih
+                document.body.style.backgroundColor = '#fbf6f5';
             } else {
                 document.getElementById('token-error').style.display = 'block';
             }
+        }
+
+        function switchTab(tabName) {
+            const links = document.querySelectorAll('.nav-links li');
+            links.forEach(li => li.classList.remove('active'));
+
+            if (tabName === 'encrypt') {
+                document.getElementById('encrypt-tab').style.display = 'block';
+                document.getElementById('decrypt-tab').style.display = 'none';
+                links[0].classList.add('active');
+            } else {
+                document.getElementById('encrypt-tab').style.display = 'none';
+                document.getElementById('decrypt-tab').style.display = 'block';
+                links[1].classList.add('active');
+            }
+        }
+
+        function logout() {
+            document.getElementById('main-dashboard').style.display = 'none';
+            document.getElementById('token-page').style.display = 'flex';
+            document.getElementById('accessToken').value = '';
+            document.getElementById('token-error').style.display = 'none';
         }
 
         function encryptAndSave() {
@@ -64,7 +136,7 @@
             const secretKey = document.getElementById('secretKey').value;
 
             if (fileInput.files.length === 0 || !secretKey) {
-                alert("Pilih file dan isi Kunci AES terlebih dahulu!");
+                alert("Harap pilih file dan tentukan Kunci AES!");
                 return;
             }
 
@@ -73,27 +145,24 @@
 
             reader.onload = function(e) {
                 const fileData = e.target.result;
-                // Proses Enkripsi dengan AES
                 const encrypted = CryptoJS.AES.encrypt(fileData, secretKey).toString();
                 
-                // Simulasi simpan ke cloud dengan auto-download file terenkripsi
                 const blob = new Blob([encrypted], {type: "text/plain"});
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
                 link.download = file.name + ".enc";
                 link.click();
-                alert("File berhasil dienkripsi dengan AES! File .enc siap disimpan di Cloud Storage.");
+                alert("Sukses! File berhasil dienkripsi dengan algoritma AES.");
             };
-
             reader.readAsDataURL(file);
         }
 
         function decryptFile() {
             const fileInput = document.getElementById('encryptedFileInput');
-            const secretKey = document.getElementById('secretKey').value;
+            const secretKey = document.getElementById('decryptSecretKey').value;
 
             if (fileInput.files.length === 0 || !secretKey) {
-                alert("Pilih file .enc dan masukkan kunci AES!");
+                alert("Harap pilih file .enc dan masukkan Kunci rahasianya!");
                 return;
             }
 
@@ -103,7 +172,6 @@
             reader.onload = function(e) {
                 const encryptedData = e.target.result;
                 try {
-                    // Proses Dekripsi dengan AES
                     const decrypted = CryptoJS.AES.decrypt(encryptedData, secretKey);
                     const originalData = decrypted.toString(CryptoJS.enc.Utf8);
 
@@ -115,10 +183,9 @@
                     link.click();
                     alert("Dekripsi Sukses! File asli berhasil dikembalikan.");
                 } catch (error) {
-                    alert("Gagal mendekripsi! Kunci AES salah atau file rusak.");
+                    alert("Gagal mendekripsi! Kunci AES salah atau data file korup.");
                 }
             };
-
             reader.readAsText(file);
         }
     </script>
