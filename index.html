@@ -3,59 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Login - Ujian Akhir Semester</title>
+    <title>Secure Cloud File Storage (AES)</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
 
-    <div class="auth-container">
-        <div class="visual-panel">
-            <div class="brand-header">
-                <span class="logo-icon">🔒</span> Keamanan Informasi
-            </div>
-            
-            <div class="illustration-box">
-                <div class="blob shape-1"></div>
-                <div class="blob shape-2"></div>
-                <div class="blob shape-3">
-                    <div class="inner-text">
-                        <h2>Case Study</h2>
-                        <p>Web Security Audit</p>
-                    </div>
-                </div>
-            </div>
+    <div class="container">
+        <h2>Aplikasi Penyimpanan File Aman (AES)</h2>
+        
+        <div id="token-section">
+            <p>Masukkan Token Akses Anda untuk Masuk:</p>
+            <input type="text" id="accessToken" placeholder="Contoh Token: UAS-RAHASIA-2026">
+            <button onclick="verifyToken()">Verifikasi Token</button>
+            <p id="token-error" style="color: red; display: none;">Token Salah! Akses Ditolak.</p>
         </div>
 
-        <div class="login-panel">
-            <div class="form-wrapper">
-                <h1>LOGIN</h1>
-                
-                <form action="#" method="POST" class="secure-form">
-                    <div class="input-group">
-                        <label for="username">Username</label>
-                        <div class="input-wrapper">
-                            <span class="input-icon">👤</span>
-                            <input type="text" id="username" name="username" placeholder="Masukkan username" required>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="password">Password</label>
-                        <div class="input-wrapper">
-                            <span class="input-icon">🔑</span>
-                            <input type="password" id="password" name="password" placeholder="Masukkan password" required>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-submit">LOGIN</button>
-                </form>
-            </div>
+        <div id="main-section" style="display: none;">
+            <h3>Selamat Datang di Storage Aman</h3>
+            <hr>
             
-            <footer class="panel-footer">
-                <p>&copy; 2026 Tugas Project Case Study[cite: 1]</p>
-            </footer>
+            <div class="form-group">
+                <label>1. Pilih File yang Akan Diamankan:</label>
+                <input type="file" id="fileInput">
+            </div>
+
+            <div class="form-group">
+                <label>2. Masukkan Kunci Rahasia AES (Password File):</label>
+                <input type="password" id="secretKey" placeholder="Kunci AES">
+            </div>
+
+            <button onclick="encryptAndSave()">Enkripsi & Simpan File</button>
+            
+            <hr>
+            <h3>Menu Dekripsi (Buka File)</h3>
+            <div class="form-group">
+                <label>Pilih File Terenkripsi (.enc):</label>
+                <input type="file" id="encryptedFileInput">
+            </div>
+            <button onclick="decryptFile()">Dekripsi & Buka File</button>
         </div>
     </div>
 
+    <script>
+        // Batasi token akses secara statis (Bisa kamu ganti sesukamu)
+        const VALID_TOKEN = "UAS-RAHASIA-2026";
+
+        function verifyToken() {
+            const input = document.getElementById('accessToken').value;
+            if (input === VALID_TOKEN) {
+                document.getElementById('token-section').style.display = 'none';
+                document.getElementById('main-section').style.display = 'block';
+            } else {
+                document.getElementById('token-error').style.display = 'block';
+            }
+        }
+
+        function encryptAndSave() {
+            const fileInput = document.getElementById('fileInput');
+            const secretKey = document.getElementById('secretKey').value;
+
+            if (fileInput.files.length === 0 || !secretKey) {
+                alert("Pilih file dan isi Kunci AES terlebih dahulu!");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const fileData = e.target.result;
+                // Proses Enkripsi dengan AES
+                const encrypted = CryptoJS.AES.encrypt(fileData, secretKey).toString();
+                
+                // Simulasi simpan ke cloud dengan auto-download file terenkripsi
+                const blob = new Blob([encrypted], {type: "text/plain"});
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = file.name + ".enc";
+                link.click();
+                alert("File berhasil dienkripsi dengan AES! File .enc siap disimpan di Cloud Storage.");
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function decryptFile() {
+            const fileInput = document.getElementById('encryptedFileInput');
+            const secretKey = document.getElementById('secretKey').value;
+
+            if (fileInput.files.length === 0 || !secretKey) {
+                alert("Pilih file .enc dan masukkan kunci AES!");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const encryptedData = e.target.result;
+                try {
+                    // Proses Dekripsi dengan AES
+                    const decrypted = CryptoJS.AES.decrypt(encryptedData, secretKey);
+                    const originalData = decrypted.toString(CryptoJS.enc.Utf8);
+
+                    if (!originalData) throw new Error();
+
+                    const link = document.createElement("a");
+                    link.href = originalData;
+                    link.download = file.name.replace(".enc", "");
+                    link.click();
+                    alert("Dekripsi Sukses! File asli berhasil dikembalikan.");
+                } catch (error) {
+                    alert("Gagal mendekripsi! Kunci AES salah atau file rusak.");
+                }
+            };
+
+            reader.readAsText(file);
+        }
+    </script>
 </body>
 </html>
