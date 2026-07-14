@@ -1,97 +1,314 @@
-/* Gaya Dasar Halaman */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7f6;
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff0f2;
     min-height: 100vh;
 }
 
-/* Kotak Container Utama */
-.container {
+/* efek polkadot cantik di latar belakang halaman masuk */
+.login-wrapper {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff0f2;
+    background-image: radial-gradient(#f7cad0 20%, transparent 20%),
+                      radial-gradient(#f7cad0 20%, transparent 20%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    padding: 20px;
+}
+
+/* Container utama kartu login mirip mockup asli */
+.login-container {
     background-color: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
     width: 100%;
-    max-width: 500px;
-    box-sizing: border-box;
+    max-width: 850px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(74, 46, 39, 0.15);
+    overflow: hidden;
+    border: 4px solid #4a2e27;
 }
 
-h2, h3 {
-    color: #333333;
-    text-align: center;
-    margin-top: 0;
+/* Bagian kiri dengan warna cokelat estetik melengkung */
+.login-left {
+    background-color: #4a2e27;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    color: #ffffff;
+    position: relative;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
 }
 
-h3 {
-    margin-top: 20px;
-    color: #2c3e50;
+.login-left::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    background-color: #4a2e27;
+    border-radius: 50% 0 0 50%;
+    z-index: 1;
 }
 
-hr {
-    border: 0;
-    height: 1px;
-    background: #dddddd;
-    margin: 20px 0;
+.circle-badge {
+    background-color: #ffb3c1;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid #ffffff;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* Gaya Form dan Input */
-.form-group {
-    margin-bottom: 15px;
+.case-title {
+    color: #4a2e27;
+    font-weight: 800;
+    font-size: 18px;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
+.case-sub {
+    color: #ffffff;
+    font-size: 11px;
+    background-color: #4a2e27;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 5px;
     font-weight: bold;
-    color: #555555;
+}
+
+.secure-badge {
+    margin-top: 30px;
+    font-size: 15px;
+    letter-spacing: 1px;
+    z-index: 2;
+    color: #ffc2d1;
+}
+
+/* Bagian Kanan untuk Input Token */
+.login-right {
+    flex: 1.2;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+    background: white;
+}
+
+.login-right h2 {
+    color: #4a2e27;
+    font-size: 28px;
+    margin-bottom: 25px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.input-box {
+    margin-bottom: 20px;
+}
+
+.input-box label {
+    display: block;
+    color: #ff758f;
+    font-weight: bold;
+    margin-bottom: 8px;
     font-size: 14px;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 14px;
+.input-field {
+    display: flex;
+    align-items: center;
+    background-color: #fff0f2;
+    border: 2px solid #ffb3c1;
+    border-radius: 20px;
+    padding: 5px 15px;
 }
 
-input[type="file"] {
-    background-color: #fafafa;
-    padding: 8px;
-    cursor: pointer;
+.input-field i {
+    color: #4a2e27;
+    margin-right: 10px;
 }
 
-/* Gaya Tombol */
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #2ecc71;
+.input-field input {
     border: none;
-    border-radius: 4px;
-    color: white;
+    background: none;
+    width: 100%;
+    padding: 10px 5px;
+    font-size: 15px;
+    color: #4a2e27;
+    outline: none;
+}
+
+/* Desain Tombol Cokelat Utama */
+.btn-main {
+    background-color: #4a2e27;
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 20px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
+    transition: 0.2s ease;
+    box-shadow: 0 4px 10px rgba(74,46,39,0.3);
 }
 
-button:hover {
-    background-color: #27ae60;
+.btn-main:hover {
+    background-color: #633f35;
+    transform: translateY(-1px);
 }
 
-/* Pesan Eror */
-#token-error {
+.error-msg {
+    color: #c9184a;
     font-size: 13px;
-    margin-top: 10px;
     text-align: center;
+    margin-top: 12px;
     font-weight: bold;
+    display: none;
+}
+
+.footer-note {
+    text-align: center;
+    font-size: 11px;
+    color: #a39391;
+    margin-top: 30px;
+}
+
+/* =========================================
+   GAYA UNTUK DASHBOARD UTAMA (SETELAH MASUK)
+   ========================================= */
+
+/* Desain Navbar Atas */
+.navbar {
+    background-color: #4a2e27;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.nav-brand {
+    color: #ffb3c1;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 15px;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.nav-links li.active a,
+.nav-links li a:hover {
+    background-color: #ffb3c1;
+    color: #4a2e27;
+}
+
+.nav-links li a.logout-link {
+    background-color: #c9184a;
+    color: white;
+}
+
+.nav-links li a.logout-link:hover {
+    background-color: #a6133c;
+}
+
+/* Layout Konten di Bawah Navbar */
+.dashboard-container {
+    max-width: 650px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.card-box {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    border: 3px solid #4a2e27;
+    padding: 30px;
+}
+
+.card-header {
+    background-color: #ff758f;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.card-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #4a2e27;
+    margin-bottom: 8px;
+}
+
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ffb3c1;
+    background-color: #fff0f2;
+    border-radius: 12px;
+    outline: none;
+    color: #4a2e27;
+}
+
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed #ffb3c1;
+    background-color: #fff6f7;
+    border-radius: 12px;
+    cursor: pointer;
 }
