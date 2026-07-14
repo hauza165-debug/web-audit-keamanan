@@ -7,15 +7,12 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Library CryptoJS untuk AES -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-    <!-- SDK JavaScript Supabase Resmi -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <!-- ALUR 1: LOGIN / MASUKKAN TOKEN AKSES -->
     <div id="token-page" class="login-wrapper">
         <div class="login-container">
             <div class="login-left">
@@ -49,7 +46,6 @@
         </div>
     </div>
 
-    <!-- MODAL PANDUAN TOKEN -->
     <div id="tokenModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -63,7 +59,6 @@
     </div>
 
 
-    <!-- ALUR 2: DASHBOARD UTAMA (SETELAH TOKEN BENAR) -->
     <div id="main-dashboard" style="display: none;">
         <nav class="navbar">
             <div class="nav-brand">
@@ -78,7 +73,6 @@
 
         <div class="dashboard-container">
             
-            <!-- ALUR UPLOAD & ENKRIPSI -->
             <div id="encrypt-tab" class="card-box">
                 <div class="card-header">
                     <i class="fa-solid fa-file-shield"></i>
@@ -97,7 +91,6 @@
                 <div id="uploadStatus" style="margin-top:10px; font-weight:bold; color:#27ae60; text-align:center;"></div>
             </div>
 
-            <!-- ALUR DAFTAR FILE, DOWNLOAD & DEKRIPSI -->
             <div id="files-tab" class="card-box" style="display: none;">
                 <div class="card-header" style="background-color: #7b5043;">
                     <i class="fa-solid fa-server"></i>
@@ -106,14 +99,12 @@
                 <br>
                 <p class="card-desc">Pilih file terenkripsi dari cloud di bawah untuk memulai proses unduh dan dekripsi.</p>
                 
-                <!-- List File Otomatis -->
                 <ul id="fileListContainer" class="file-list-group">
                     <li style="text-align:center; color:#999;">Memuat data file dari cloud...</li>
                 </ul>
 
                 <hr style="margin:20px 0; border:1px dashed #4a2e27;">
                 
-                <!-- Form Dekripsi File yang Dipilih -->
                 <div id="decryption-zone" style="display:none;">
                     <h4><i class="fa-solid fa-unlock-keyhole"></i> Area Dekripsi Berkas</h4>
                     <p style="font-size:13px; margin-bottom:10px;">File terpilih: <strong id="selectedFileName" style="color:#c9184a;">-</strong></p>
@@ -132,8 +123,8 @@
         const SUPABASE_URL = "https://espisnaefzoinivsrabc.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_QEHg3MvED_qomoiYzTcLTA_5M4xGnrY";
         
-        // Inisialisasi Klien Supabase
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Inisialisasi Klien Supabase (Deklarasi tunggal, bersih dari eror ganda)
+        const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const VALID_TOKEN = "UAS-RAHASIA-2026";
         let currentSelectedFile = null;
@@ -180,7 +171,7 @@
                 statusDiv.innerText = "Mengunggah ke Supabase Cloud Storage...";
 
                 // 2. Upload Berkas ke Supabase Storage Bucket 'web_keamanan'
-                const { data, error } = await supabase.storage
+                const { data, error } = await sbClient.storage
                     .from('web_keamanan')
                     .upload(encryptedFileName, blob, { cacheControl: '3600', upsert: true });
 
@@ -207,7 +198,7 @@
             const container = document.getElementById('fileListContainer');
             container.innerHTML = `<li style="text-align:center; color:#999;">Memuat data file dari cloud...</li>`;
             
-            const { data, error } = await supabase.storage.from('web_keamanan').list();
+            const { data, error } = await sbClient.storage.from('web_keamanan').list();
 
             if (error) {
                 console.error(error);
@@ -231,88 +222,4 @@
                 li.innerHTML = `<i class="fa-solid fa-file-code"></i> <span>${displayName} (.enc)</span>`;
                 
                 li.onclick = () => {
-                    const { data: urlData } = supabase.storage.from('web_keamanan').getPublicUrl(item.name);
-                    selectFileForDecryption({
-                        originalName: displayName,
-                        cloudURL: urlData.publicUrl
-                    });
-                };
-                container.appendChild(li);
-            });
-        }
-
-        function selectFileForDecryption(fileData) {
-            currentSelectedFile = fileData;
-            document.getElementById('selectedFileName').innerText = fileData.originalName + " (.enc)";
-            document.getElementById('decryption-zone').style.display = "block";
-        }
-
-        // ALUR DOWNLOAD & DEKRIPSI AES (PERBAIKAN SYNTAX)
-        function downloadAndDecrypt() {
-            const secretKey = document.getElementById('decryptSecretKey').value;
-            if (!secretKey) {
-                alert("Masukkan password AES untuk mendekripsi berkas!");
-                return;
-            }
-
-            fetch(currentSelectedFile.cloudURL)
-                .then(response => response.text())
-                .then(encryptedCiphertext => {
-                    try {
-                        // Proses Dekripsi AES yang benar
-                        const decryptedBytes = CryptoJS.AES.decrypt(encryptedCiphertext, secretKey);
-                        const originalData = decryptedBytes.toString(CryptoJS.enc.Utf8);
-
-                        if (!originalData || originalData.trim() === "") throw new Error();
-
-                        // Download Berkas Asli
-                        const link = document.createElement("a");
-                        link.href = originalData;
-                        link.download = currentSelectedFile.originalName;
-                        link.click();
-                        
-                        alert("Dekripsi Sukses! Berkas asli berhasil diunduh kembali.");
-                        document.getElementById('decryptSecretKey').value = "";
-                    } catch (e) {
-                        alert("Gagal mendekripsi! Kunci AES salah.");
-                    }
-                }).catch(err => {
-                    alert("Gagal mengunduh file dari server cloud storage.");
-                });
-        }
-
-        // Fungsi Navigasi UI
-        function switchTab(tabName) {
-            const menuEncrypt = document.getElementById('menu-encrypt');
-            const menuFiles = document.getElementById('menu-files');
-            if (tabName === 'encrypt') {
-                document.getElementById('encrypt-tab').style.display = 'block';
-                document.getElementById('files-tab').style.display = 'none';
-                menuEncrypt.className = 'nav-item active';
-                menuFiles.className = 'nav-item';
-            } else {
-                document.getElementById('encrypt-tab').style.display = 'none';
-                document.getElementById('files-tab').style.display = 'block';
-                menuEncrypt.className = 'nav-item';
-                menuFiles.className = 'nav-item active';
-            }
-        }
-
-        // Fungsi Keluar / Log Out
-        function logout() {
-            document.getElementById('main-dashboard').style.display = 'none';
-            document.getElementById('token-page').style.display = 'flex';
-            document.getElementById('accessToken').value = '';
-            document.body.style.backgroundImage = 'radial-gradient(#f7cad0 20%, transparent 20%), radial-gradient(#f7cad0 20%, transparent 20%)';
-            document.body.style.backgroundColor = '#fff0f2';
-        }
-
-        function openModal() { document.getElementById("tokenModal").style.display = "block"; }
-        function closeModal() { document.getElementById("tokenModal").style.display = "none"; }
-        function copyToken() {
-            navigator.clipboard.writeText(document.getElementById("demoTokenText").innerText);
-            alert("Token disalin!");
-        }
-    </script>
-</body>
-</html>
+                    const { data: urlData } = sbClient.storage.from('web_keamanan').getPublicUrl(item.name);
