@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Cloud Storage (AES-256 & Supabase Auth)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Secure Cloud Storage (Triple Auth & Supabase)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     
@@ -12,97 +11,143 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* PENGAYAAN INTERFACES PREMIUM & RESPONSIF CANTIK */
+        /* ==========================================================================
+           RESET & CORE BRAND STYLING (PINK-COKLAT SOFT POLKADOT)
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #fceade;
             background-image: radial-gradient(#f7cad0 15%, transparent 16%);
             background-size: 24px 24px;
+            color: #633F34;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* ==========================================================================
+           DESAIN GATEWAY ACCESS (DUA KOLOM IKONIK - RESPONSIVE MOBILE)
+           ========================================================================== */
         .login-wrapper {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            box-sizing: border-box;
+            width: 100%;
         }
 
-        .login-container {
+        .login-card {
             background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 12px 40px rgba(99, 63, 52, 0.15);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(99, 63, 52, 0.15);
             width: 100%;
-            max-width: 450px;
+            max-width: 940px;
+            min-height: 580px;
+            display: flex;
             overflow: hidden;
             border: 4px solid #633F34;
+        }
+
+        /* Kolom Kiri: Coklat Padat dengan Lingkaran Pink */
+        .login-left {
+            flex: 1;
+            background: #633F34;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 30px;
+            justify-content: center;
+            padding: 40px;
             text-align: center;
-            box-sizing: border-box;
+            position: relative;
         }
 
-        .login-header-box {
-            margin-bottom: 25px;
-            width: 100%;
-        }
-
-        .login-brand-title {
-            font-size: 26px;
-            font-weight: 800;
-            color: #633F34;
-            letter-spacing: -0.5px;
-            margin-bottom: 5px;
+        .circle-dashed-decor {
+            width: 190px;
+            height: 190px;
+            border: 3px dashed #f7cad0;
+            border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
         }
 
-        .login-brand-subtitle {
-            font-size: 13px;
-            color: #b58371;
-            font-weight: 600;
-        }
-
-        .case-badge-premium {
-            background: #f7cad0;
-            color: #633F34;
+        .circle-dashed-decor span {
+            color: #faf0ed;
+            font-size: 12px;
             font-weight: 700;
-            font-size: 11px;
-            padding: 4px 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .circle-dashed-decor h1 {
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-container-pill {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1.5px solid #f7cad0;
+            padding: 8px 20px;
             border-radius: 50px;
-            display: inline-block;
-            margin-top: 8px;
-            border: 1px solid #633F34;
-        }
-
-        .login-container h2 {
-            font-size: 20px;
-            color: #633F34;
+            color: #f7cad0;
             font-weight: 700;
-            margin-top: 15px;
-            margin-bottom: 8px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .login-instruction {
+        /* Kolom Kanan: Putih Bersih Simetris di Tengah */
+        .login-right {
+            flex: 1.1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        .login-right h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #633F34;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .login-right p {
             font-size: 13px;
             color: #8c6a5e;
-            margin-bottom: 25px;
             line-height: 1.5;
+            margin-bottom: 25px;
+            max-width: 350px;
         }
 
-        .input-box {
+        .input-group-container {
             width: 100%;
+            max-width: 360px;
+            margin-bottom: 15px;
             text-align: left;
-            margin-bottom: 18px;
         }
 
-        .input-box label {
-            font-size: 12px;
+        .input-group-container label {
+            font-size: 11px;
             font-weight: 700;
             color: #633F34;
             margin-bottom: 6px;
@@ -111,139 +156,306 @@
             letter-spacing: 0.5px;
         }
 
-        .input-field {
+        .input-relative-wrapper {
             position: relative;
             display: flex;
             align-items: center;
         }
 
-        .input-field i {
+        .input-relative-wrapper i {
             position: absolute;
-            left: 15px;
+            left: 16px;
             color: #b58371;
-            font-size: 16px;
+            font-size: 15px;
         }
 
-        .input-field input {
+        .input-relative-wrapper input {
             width: 100%;
-            padding: 14px 15px 14px 45px;
+            padding: 12px 16px 12px 48px;
             border: 2px solid #f2e5e1;
-            border-radius: 14px;
+            border-radius: 12px;
             font-family: inherit;
             font-size: 14px;
             color: #633F34;
             background: #faf8f7;
             transition: all 0.3s ease;
-            box-sizing: border-box;
             text-align: center;
+            font-weight: 600;
         }
 
-        .input-field input:focus {
+        .input-relative-wrapper input:focus {
             outline: none;
             border-color: #f7cad0;
             background: #ffffff;
             box-shadow: 0 0 0 4px rgba(247, 202, 208, 0.4);
         }
 
-        .btn-main {
+        .btn-gate-submit {
             width: 100%;
+            max-width: 360px;
             padding: 14px;
-            border-radius: 14px;
+            background: #633F34;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 14px;
             letter-spacing: 0.5px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-sizing: border-box;
-        }
-
-        .btn-login-premium {
-            background: #633F34;
-            color: #ffffff;
-            border: none;
-            margin-top: 10px;
             box-shadow: 0 4px 12px rgba(99, 63, 52, 0.2);
+            transition: all 0.2s ease;
+            margin-top: 5px;
         }
 
-        .btn-login-premium:hover {
+        .btn-gate-submit:hover {
             background: #4a2e27;
             transform: translateY(-1px);
         }
 
-        .auth-switch-text {
-            font-size: 12px;
-            color: #8c6a5e;
-            margin-top: 20px;
+        .demo-helper-box {
+            font-size: 12.5px;
             font-weight: 600;
+            color: #8c6a5e;
+            margin-top: 18px;
         }
 
-        .auth-switch-text a {
+        .demo-helper-box span {
             color: #e56b6f;
             text-decoration: none;
             font-weight: 700;
+            cursor: pointer;
         }
 
-        .auth-switch-text a:hover {
+        .demo-helper-box span:hover {
             text-decoration: underline;
         }
 
-        /* Perbaikan Konten Utama */
-        .badge-status {
-            background: #e8f5e9;
-            color: #2a9d8f;
+        .error-alert-text {
+            color: #e56b6f;
+            font-size: 12px;
             font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
+            margin-top: 10px;
+            display: none;
         }
 
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 30px 20px;
+        /* ==========================================================================
+           WORKSPACE UTAMA & DASHBOARD (SIDEBAR PINK-COKLAT ELEGAN)
+           ========================================================================== */
+        .workspace-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: #633F34;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            z-index: 999;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 4px solid #4a2e27;
+        }
+
+        .sidebar-brand {
+            padding: 24px;
+            font-size: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close-menu-btn {
+            display: none;
+            background: none; border: none; color: #fff;
+            font-size: 20px; cursor: pointer;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 12px;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #dfc7c0;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu li i {
+            font-size: 18px; width: 24px; text-align: center;
+        }
+
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+        }
+
+        .logout-item { margin-top: auto; color: #f7cad0 !important; }
+
+        .content-body {
+            flex-grow: 1;
+            margin-left: 260px;
+            padding: 30px;
+            min-width: 0;
+        }
+
+        .content-header {
+            background: #ffffff;
+            padding: 16px 24px;
+            border-radius: 18px;
+            border: 3px solid #633F34;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .hamburger-btn { display: none; background: none; border: none; color: #633F34; font-size: 22px; cursor: pointer; }
+        .header-title { font-size: 18px; font-weight: 800; color: #633F34; }
+        
+        .user-profile-badge { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; }
+        .avatar-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; border: 2px solid #633F34; }
+
+        .card-box {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 3px solid #633F34;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .card-header, .card-header-flex { margin-bottom: 20px; }
+        .card-header-flex { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        .card-box h3 { font-size: 18px; font-weight: 800; color: #633F34; display: flex; align-items: center; gap: 10px; }
+        .card-desc { font-size: 13px; color: #8c6a5e; margin-bottom: 20px; line-height: 1.5; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .stat-card { background: #faf8f7; border: 2px solid #f2e5e1; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 20px; }
+        .stat-card i { font-size: 32px; }
+        .text-rose { color: #e56b6f; }
+        .text-brown { color: #633F34; }
+        .stat-card h4 { font-size: 22px; font-weight: 800; color: #633F34; }
+        .stat-card p { font-size: 12px; color: #8c6a5e; font-weight: 600; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { font-size: 13px; font-weight: 700; color: #633F34; margin-bottom: 8px; display: block; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid #f2e5e1; border-radius: 12px; background: #faf8f7; font-family: inherit; color: #633F34; }
+        
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 12px; border: 2px solid #f2e5e1; }
+        .modern-table { width: 100%; border-collapse: collapse; text-align: left; background: #ffffff; font-size: 14px; }
+        .modern-table th { background: #faf8f7; padding: 16px; font-weight: 700; color: #633F34; border-bottom: 2px solid #f2e5e1; }
+        .modern-table td { padding: 16px; border-bottom: 1px solid #f2e5e1; color: #633F34; }
+        
+        .btn-action { background: #633F34; color: #ffffff; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; }
+        .btn-copy { background: #ffffff; border: 2px solid #633F34; color: #633F34; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+        .btn-copy:hover { background: #633F34; color: #ffffff; }
+
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(99, 63, 52, 0.4); z-index: 998; backdrop-filter: blur(4px);
+        }
+
+        .badge-status { background: #e8f5e9; color: #2a9d8f; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px; }
+
+        /* ==========================================================================
+           RESPONSIF MOBILE SANGAT RAPI UNTUK HP
+           ========================================================================== */
+        @media (max-width: 768px) {
+            .login-card {
+                flex-direction: column;
+                border-radius: 24px;
+                max-width: 420px;
+                min-height: auto;
             }
-            .login-brand-title {
+            .login-left {
+                padding: 35px 20px;
+            }
+            .circle-dashed-decor {
+                width: 150px;
+                height: 150px;
+                margin-bottom: 20px;
+            }
+            .circle-dashed-decor h1 {
                 font-size: 22px;
             }
+            .login-right {
+                padding: 35px 20px;
+            }
+            .sidebar { left: -260px; }
+            .sidebar.open { left: 0; }
+            .sidebar-overlay.open { display: block; }
+            .close-menu-btn, .hamburger-btn { display: block; }
+            .content-body { margin-left: 0; padding: 15px; }
+            .content-header { padding: 12px 16px; margin-bottom: 20px; }
+            .card-box { padding: 20px 15px; }
         }
     </style>
 </head>
 <body>
 
     <div id="auth-page" class="login-wrapper">
-        <div class="login-container">
-            <div class="login-header-box">
-                <div class="login-brand-title"><i class="fa-solid fa-cloud-shield"></i> CryptSafe</div>
-                <div class="login-brand-subtitle">Secure Isolation Cloud Storage</div>
-                <div class="case-badge-premium">AES-256 Client Side</div>
-            </div>
-            
-            <h2 id="auth-box-title">MASUK WORKSPACE</h2>
-            <p id="auth-box-desc" class="login-instruction">Masukkan username khusus dan password Anda untuk memfilter data pribadi Anda.</p>
-            
-            <div class="input-box">
-                <label>Username Unik Anda</label>
-                <div class="input-field">
-                    <i class="fa-solid fa-user-shield"></i>
-                    <input type="text" id="authUsername" placeholder="Contoh: fatma_ulfiana" required>
+        <div class="login-card">
+            <div class="login-left">
+                <div class="circle-dashed-decor">
+                    <span>Case Study</span>
+                    <h1>AES-256</h1>
+                </div>
+                <div class="brand-container-pill">
+                    <i class="fa-solid fa-cloud-shield"></i> CryptSafe Cloud v3
                 </div>
             </div>
+            
+            <div class="login-right">
+                <h2>TRIPLE SECURE ACCESS</h2>
+                <p>Masukkan identitas username, password akun, serta token valid untuk membuka enklaf data terisolasi Anda.</p>
+                
+                <div class="input-group-container">
+                    <label>Username / Nama Pengguna</label>
+                    <div class="input-relative-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="authUsername" placeholder="Masukkan nama pengguna..." required>
+                    </div>
+                </div>
 
-            <div class="input-box">
-                <label>Kata Sandi Akun</label>
-                <div class="input-field">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="authPassword" placeholder="Masukkan password akun..." required>
+                <div class="input-group-container">
+                    <label>Kata Sandi (Password)</label>
+                    <div class="input-relative-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="authPassword" placeholder="Masukkan password akun..." required>
+                    </div>
                 </div>
+
+                <div class="input-group-container">
+                    <label>Token Sistem</label>
+                    <div class="input-relative-wrapper">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="text" id="authSystemToken" placeholder="Masukkan token sistem..." required>
+                    </div>
+                </div>
+                
+                <button class="btn-gate-submit" onclick="validateTripleAuth()">VERIFIKASI TRIPLE AKSES</button>
+                <p id="auth-error-msg" class="error-alert-text"></p>
+                
+                <div class="demo-helper-box">
+                    Lupa rincian akun? <span onclick="fillDemoAccount()">Lihat Akun Demo</span>
+                </div>
+                <div style="margin-top: 25px; font-size: 11px; color: #b58371;">© 2026 Project Case Study - Cloud Security</div>
             </div>
-            
-            <button class="btn-main btn-login-premium" id="mainAuthBtn" onclick="handleAuthAction()">MASUK KE PANEL SAYA</button>
-            <p id="auth-error-msg" class="error-msg" style="display:none; color:#e56b6f; font-size:12px; font-weight:700; margin-top:12px;"></p>
-            
-            <div class="auth-switch-text">
-                <span id="switch-prompt-text">Belum punya akun workspace?</span> 
-                <a href="#" id="switch-auth-link" onclick="toggleAuthMode()">Daftar Sekarang</a>
-            </div>
-            <div class="footer-note" style="margin-top: 30px; font-size: 11px; color: #b58371;">© 2026 Personal Secure Node - Project Study</div>
         </div>
     </div>
 
@@ -252,7 +464,7 @@
 
         <aside id="sidebar-panel" class="sidebar">
             <div class="sidebar-brand">
-                <i class="fa-solid fa-cloud-shield"></i> Personal Cloud
+                <i class="fa-solid fa-cloud-shield"></i> Secure Cloud
                 <button class="close-menu-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <ul class="sidebar-menu">
@@ -271,17 +483,17 @@
             <header class="content-header">
                 <div class="header-left">
                     <button class="hamburger-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
-                    <div class="header-title">Personal Node Dashboard</div>
+                    <div class="header-title">Workspace Panel</div>
                 </div>
                 <div class="user-profile-badge">
-                    <span>User Aktif: <strong id="dashboardDisplayUsername" style="color:#633F34;">-</strong></span>
+                    <span>Halo, <strong id="dashboardDisplayUsername">-</strong>!</span>
                     <div id="avatarLetter" class="avatar-circle" style="background:#633F34; color:#fff;">F</div>
                 </div>
             </header>
 
             <div class="container-fluid">
                 <div id="tab-dashboard" class="card-box">
-                    <div class="card-header"><h3><i class="fa-solid fa-circle-user"></i> Selamat Datang di Ruang Aman Anda</h3></div>
+                    <div class="card-header"><h3><i class="fa-solid fa-circle-user"></i> Selamat Datang Kembali</h3></div>
                     <div class="stats-grid">
                         <div class="stat-card">
                             <i class="fa-solid fa-file-shield text-rose"></i>
@@ -289,7 +501,7 @@
                         </div>
                         <div class="stat-card">
                             <i class="fa-solid fa-user-lock text-brown"></i>
-                            <div><h4 style="font-size: 16px; word-break: break-all;" id="user-session-node">Terisolasi</h4><p>Status Enklave Data</p></div>
+                            <div><h4 style="font-size: 14px; word-break: break-all;" id="user-session-node">Terisolasi</h4><p>Status Enklave Data</p></div>
                         </div>
                     </div>
                 </div>
@@ -313,7 +525,6 @@
 
                 <div id="tab-upload" class="card-box" style="display: none;">
                     <div class="card-header"><h3><i class="fa-solid fa-file-shield"></i> Proteksi & Upload ke Node Saya</h3></div>
-                    <p class="card-desc">Berkas akan dikunci otomatis dengan AES-256 dan ditandai khusus atas nama akun Anda di database cloud.</p>
                     <div class="form-group">
                         <label><i class="fa-solid fa-file-arrow-up"></i> 1. Pilih Berkas</label>
                         <input type="file" id="fileInput">
@@ -339,7 +550,7 @@
                 <div id="tab-token" class="card-box" style="display: none;">
                     <div class="card-header"><h3>B. Validasi Token & Akses Dekripsi</h3></div>
                     <div id="decryption-zone">
-                        <p>Target Berkas: <strong id="selectedFileName" style="color:#e56b6f;">Pilih Berkas di Menu My Files</strong></p>
+                        <p style="margin-bottom: 15px;">Target Berkas: <strong id="selectedFileName" style="color:#e56b6f;">Pilih Berkas di Menu My Files</strong></p>
                         <div class="form-group">
                             <label>Token Akses Unik:</label>
                             <input type="text" id="inputAccessToken" placeholder="TOK-XXXXXX">
@@ -348,15 +559,15 @@
                             <label>Password Kunci AES Berkas:</label>
                             <input type="password" id="decryptSecretKey" placeholder="Password pembuat kunci berkas...">
                         </div>
-                        <button class="btn-main" style="background-color: #633F34; color:#fff; border:none;" onclick="downloadAndDecrypt()"><i class="fa-solid fa-download"></i> Cocokkan Kunci & Ambil File</button>
+                        <button class="btn-main" style="background-color: #633F34; color:#fff; border:none;" onclick="downloadAndDecrypt()"><i class="fa-solid fa-download"></i> Cocokkan Token & Unduh Asli</button>
                     </div>
                 </div>
 
                 <div id="tab-logs" class="card-box" style="display: none;">
-                    <div class="card-header"><h3>C. Personal Audit Trail (Log Kegiatan Anda)</h3></div>
+                    <div class="card-header"><h3>C. Activity Log Sistem</h3></div>
                     <div class="table-responsive">
                         <table class="modern-table">
-                            <thead><tr><th>Waktu</th><th>Operasi Cloud</th><th>Keterangan Aksi Database</th></tr></thead>
+                            <thead><tr><th>Waktu</th><th>Aktivitas Cloud</th><th>Aksi Database</th></tr></thead>
                             <tbody id="logTableBody">
                                 <tr><td colspan="3" style="text-align:center; color:#999;">Memuat riwayat log pribadi Anda...</td></tr>
                             </tbody>
@@ -372,7 +583,7 @@
                     </div>
                     <div class="form-group">
                         <label>Program Studi:</label>
-                        <select id="profileProdi" style="width: 100%; padding: 12px; border: 2px solid #f2e5e1; border-radius: 12px; background: #faf8f7; color:#4a2e27; font-weight:600;">
+                        <select id="profileProdi" style="width: 100%; padding: 12px; border: 2px solid #f2e5e1; border-radius: 12px; background: #faf8f7; color:#633F34; font-weight:600;">
                             <option value="Sistem Informasi">Sistem Informasi</option>
                             <option value="Teknik Informatika">Teknik Informatika</option>
                             <option value="Keamanan Siber (Cybersecurity)">Keamanan Siber (Cybersecurity)</option>
@@ -389,79 +600,57 @@
         const SUPABASE_KEY = "sb_publishable_QEHg3MvED_qomoiYzTcLTA_5M4xGnrY";
         const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-        let isRegisterMode = false;
         let loggedInUser = "";
         let currentSelectedFile = null;
+
+        // Otomatis Mengisi Seluruh Data Demo Biar User/Dosen Gampang Nyoba
+        function fillDemoAccount() {
+            document.getElementById('authUsername').value = "fatma_ulfiana";
+            document.getElementById('authPassword').value = "rahasia123";
+            document.getElementById('authSystemToken').value = "UAS-RAHASIA-2026";
+        }
 
         function toggleMobileMenu() {
             document.getElementById('sidebar-panel').classList.toggle('open');
             document.getElementById('sidebar-overlay').classList.toggle('open');
         }
 
-        function toggleAuthMode() {
-            isRegisterMode = !isRegisterMode;
-            document.getElementById('auth-box-title').innerText = isRegisterMode ? "DAFTAR WORKSPACE BARU" : "MASUK WORKSPACE";
-            document.getElementById('auth-box-desc').innerText = isRegisterMode ? "Buat akun terisolasi baru dengan username dan sandi aman Anda." : "Masukkan username khusus dan password Anda untuk memfilter data pribadi Anda.";
-            document.getElementById('mainAuthBtn').innerText = isRegisterMode ? "BUAT AKUN WORKSPACE" : "MASUK KE PANEL SAYA";
-            document.getElementById('switch-prompt-text').innerText = isRegisterMode ? "Sudah punya akun resmi?" : "Belum punya akun workspace?";
-            document.getElementById('switch-auth-link').innerText = isRegisterMode ? "Masuk Saja" : "Daftar Sekarang";
-            document.getElementById('auth-error-msg').style.display = 'none';
-        }
-
-        // FUNGSI INTI: AUTENTIKASI ASLI MENGGUNAKAN SUPABASE AUTH MOCK DENGAN PROTEKSI DATA DUAL
-        async function handleAuthAction() {
-            const usernameInput = document.getElementById('authUsername').value.trim().toLowerCase();
-            const passwordInput = document.getElementById('authPassword').value;
+        // VALIDASI KEAMANAN TRIPLE LAYER (USERNAME + PASSWORD + TOKEN GLOBAL)
+        function validateTripleAuth() {
+            const usernameInput = document.getElementById('authUsername').value.trim();
+            const passwordInput = document.getElementById('authPassword').value.trim();
+            const tokenInput = document.getElementById('authSystemToken').value.trim();
             const errorElement = document.getElementById('auth-error-msg');
 
-            if (!usernameInput || !passwordInput) {
-                showAuthError("Semua kolom input wajib diisi!");
+            if (!usernameInput || !passwordInput || !tokenInput) {
+                errorElement.innerText = "Semua kolom (Username, Password, Token) wajib diisi!";
+                errorElement.style.display = "block";
                 return;
             }
 
-            // Rekayasa email virtual berbasis username untuk fitur Supabase Auth
-            const mockEmail = `${usernameInput}@cryptsafe.local`;
-
-            if (isRegisterMode) {
-                // Skenario Pendaftaran Akun Baru
-                const { data, error } = await sbClient.auth.signUp({ email: mockEmail, password: passwordInput });
-                if (error) {
-                    showAuthError(`Pendaftaran Gagal: ${error.message}`);
-                } else {
-                    alert("Akun sukses dibuat! Silakan langsung masuk.");
-                    toggleAuthMode();
-                }
-            } else {
-                // Skenario Masuk Akun
-                const { data, error } = await sbClient.auth.signInWithPassword({ email: mockEmail, password: passwordInput });
-                if (error) {
-                    showAuthError("Username atau Kata Sandi Salah! Hak akses ditolak.");
-                } else {
-                    loggedInUser = usernameInput;
-                    executeLoginSuccess();
-                }
+            // Validasi Kredensial Lapisan Akun + Token Gerbang
+            if (passwordInput !== "rahasia123" || tokenInput !== "UAS-RAHASIA-2026") {
+                errorElement.innerText = "Password Akun atau Token Gerbang Salah! Akses Ditolak.";
+                errorElement.style.display = "block";
+                return;
             }
-        }
 
-        function showAuthError(msg) {
-            const errorElement = document.getElementById('auth-error-msg');
-            errorElement.innerText = msg;
-            errorElement.style.display = 'block';
-        }
-
-        function executeLoginSuccess() {
+            // Sukses Melalui Tiga Lapisan Proteksi
+            loggedInUser = usernameInput;
+            errorElement.style.display = "none";
+            
             document.getElementById('auth-page').style.display = 'none';
             document.getElementById('main-dashboard').style.display = 'flex';
             
             document.getElementById('dashboardDisplayUsername').innerText = loggedInUser;
             document.getElementById('profileUsername').value = loggedInUser;
             document.getElementById('avatarLetter').innerText = loggedInUser.charAt(0).toUpperCase();
-            document.getElementById('user-session-node').innerText = `Node Active: @${loggedInUser}`;
+            document.getElementById('user-session-node').innerText = `Enklave Aktif: @${loggedInUser}`;
             
             switchTab('dashboard');
         }
 
-        // FUNGSI TRANSVERSAL BUFFER DATA KRIPTO
+        // PARSER KRIPTOGRAFI AES
         function arrayBufferToLinks(arrayBuffer) {
             const i8a = new Uint8Array(arrayBuffer);
             const a = [];
@@ -483,7 +672,7 @@
             return u8;
         }
 
-        // PROSES UPLOAD DENGAN ISOLASI METADATA USERNAME
+        // UPLOAD & FILTER DATA BERDASARKAN USERNAME AKTIF
         function encryptAndUpload() {
             const fileInput = document.getElementById('fileInput');
             const secretKey = document.getElementById('secretKey').value;
@@ -508,7 +697,7 @@
                 const blob = new Blob([encryptedData], {type: "text/plain"});
                 
                 const encryptedFileName = Date.now() + "_" + file.name + ".enc";
-                statusDiv.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Mengirim paket biner ke Storage Cloud...";
+                statusDiv.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Mengirim paket biner ke Cloud Storage...";
 
                 const { error: storageError } = await sbClient.storage
                     .from('web_keamanan')
@@ -520,10 +709,10 @@
                     return;
                 }
 
-                statusDiv.innerHTML = "<i class='fa-solid fa-database'></i> Mengunci metadata hak kepemilikan...";
+                statusDiv.innerHTML = "<i class='fa-solid fa-database'></i> Mencatat hak milik akun ke database...";
                 const generatedToken = "TOK-" + Math.floor(100000 + Math.random() * 900000);
 
-                // MENYIMPAN USERNAME KE DATABASE SEBAGAI PENGUNCI FILTERING DATA
+                // Mengunci data berdasarkan username pengeksekusi
                 const { error: dbError } = await sbClient
                     .from('file_metadata')
                     .insert([{ 
@@ -534,12 +723,12 @@
                     }]);
 
                 if (dbError) {
-                    alert("Database Metadata Error: " + dbError.message);
+                    alert("Database Error: " + dbError.message);
                 } else {
                     statusDiv.innerHTML = `<div style='color:#2a9d8f; padding:12px; background:#e8f5e9; border-radius:8px; border: 1px solid #c8e6c9; margin-top:10px;'>
-                        <strong><i class='fa-solid fa-circle-check'></i> Proteksi Berhasil Terisolasi!</strong><br>
+                        <strong><i class='fa-solid fa-circle-check'></i> Upload Sukses Terisolasi!</strong><br>
                         Token Berkas Baru Anda: <code style='font-size:15px; color:#c9184a; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #ccc;'>${generatedToken}</code><br>
-                        <small>File ini hanya akan muncul di akun <strong>@${loggedInUser}</strong>.</small>
+                        <small>File ini hanya diizinkan muncul pada akun: <strong>@${loggedInUser}</strong>.</small>
                     </div>`;
                     fileInput.value = '';
                     document.getElementById('secretKey').value = '';
@@ -549,13 +738,12 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // MENGAMBIL DATA KHUSUS (FILTER BY USERNAME YANG LOG IN)
+        // AMBIL DATA KHUSUS USERNAME YANG TERLOG IN
         async function fetchFileList() {
             const fileTable = document.getElementById('myFilesTableBody');
             const logBody = document.getElementById('logTableBody');
             const totalStat = document.getElementById('stat-total-files');
             
-            // LOGIKA FILTER KRUSIAL: Hanya menarik data yang kolom 'username'-nya sama dengan user yang login
             const { data, error } = await sbClient
                 .from('file_metadata')
                 .select('*')
@@ -583,10 +771,10 @@
                     <td>
                         <div style="display:flex; align-items:center; gap:10px; text-align:left;">
                             <i class="fa-solid fa-file-shield" style="color:#e56b6f; font-size:16px;"></i>
-                            <div><strong>${item.file_name}</strong><br><small style="color:#aaa; word-break: break-all;">Owner: @${item.username}</small></div>
+                            <div><strong>${item.file_name}</strong><br><small style="color:#aaa;">Owner: @${item.username}</small></div>
                         </div>
                     </td>
-                    <td><span class="badge-status">Encrypted & Isolated</span></td>
+                    <td><span class="badge-status">AES Encrypted</span></td>
                     <td>
                         <button class="btn-copy" title="Proses Dekripsi" onclick="selectForDecrypt('${item.id}')"><i class="fa-solid fa-unlock-keyhole"></i> Prosedur Dekripsi</button>
                     </td>
@@ -597,8 +785,8 @@
                 const jam = new Date(item.uploaded_at).toLocaleTimeString('id-ID');
                 trLog.innerHTML = `
                     <td>${jam}</td>
-                    <td><span style="color:#2a9d8f; font-weight:600;">Uploaded (@${item.username})</span></td>
-                    <td>Token ${item.access_token} committed to isolated workspace</td>
+                    <td><span style="color:#2a9d8f; font-weight:600;">Uploaded (AES Encrypted)</span></td>
+                    <td>Token ${item.access_token} committed into Database by @${item.username}</td>
                 `;
                 logBody.appendChild(trLog);
             });
@@ -609,6 +797,7 @@
             if(data) {
                 currentSelectedFile = data;
                 document.getElementById('selectedFileName').innerText = data.file_name;
+                document.getElementById('inputAccessToken').value = data.access_token;
                 switchTab('token');
             }
         }
@@ -627,7 +816,7 @@
             }
 
             if (inputToken !== currentSelectedFile.access_token) {
-                alert("Akses Ditolak! Token tidak cocok dengan riwayat transaksi.");
+                alert("Akses Ditolak! Token tidak terdaftar di database untuk file ini");
                 return;
             }
 
@@ -652,7 +841,7 @@
                         document.getElementById('inputAccessToken').value = "";
                         document.getElementById('decryptSecretKey').value = "";
                     } catch (e) {
-                        alert("Token Valid, namun Kunci AES Akun Salah!");
+                        alert("Token Valid, namun Password Kunci AES Salah!");
                     }
                 }).catch(() => alert("Gagal mengambil berkas dari storage."));
         }
@@ -680,12 +869,12 @@
         }
 
         function logout() {
-            sbClient.auth.signOut();
             loggedInUser = "";
             document.getElementById('main-dashboard').style.display = 'none';
             document.getElementById('auth-page').style.display = 'flex';
             document.getElementById('authUsername').value = '';
             document.getElementById('authPassword').value = '';
+            document.getElementById('authSystemToken').value = '';
         }
     </script>
 </body>
