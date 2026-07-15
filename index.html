@@ -6,7 +6,7 @@
     <title>Secure Cloud Storage (Triple Auth & Supabase)</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -14,53 +14,46 @@
 <body>
 
     <div id="auth-page" class="login-wrapper">
-        <div class="login-card">
-            <div class="login-left">
-                <div class="circle-dashed-decor">
-                    <span>Case Study</span>
-                    <h1>AES-256</h1>
-                </div>
-                <div class="brand-container-pill">
-                    <i class="fa-solid fa-cloud-shield"></i> CryptSafe Cloud v3
-                </div>
+        <div class="login-card-box">
+            <div class="login-header-zone">
+                <i class="fa-solid fa-cloud-shield login-icon-brand"></i>
+                <h2>TRIPLE ACCESS GATEWAY</h2>
+                <p>Silakan buat akun pertamamu dengan mengisi Username & Password bebas, serta masukkan Token Gerbang Sistem yang valid.</p>
             </div>
             
-            <div class="login-right">
-                <h2>TRIPLE SECURE ACCESS</h2>
-                <p>Masukkan identitas username, password akun, serta token valid untuk membuka enklaf data terisolasi Anda.</p>
-                
-                <div class="input-group-container">
+            <div class="login-form-zone">
+                <div class="input-field-block">
                     <label>Username / Nama Pengguna</label>
-                    <div class="input-relative-wrapper">
+                    <div class="input-icon-wrapper">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" id="authUsername" placeholder="Masukkan nama pengguna..." required>
+                        <input type="text" id="authUsername" placeholder="Contoh: fatma_ulfiana" required>
                     </div>
                 </div>
 
-                <div class="input-group-container">
+                <div class="input-field-block">
                     <label>Kata Sandi (Password)</label>
-                    <div class="input-relative-wrapper">
+                    <div class="input-icon-wrapper">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="authPassword" placeholder="Masukkan password akun..." required>
+                        <input type="password" id="authPassword" placeholder="Masukkan password bebas..." required>
                     </div>
                 </div>
 
-                <div class="input-group-container">
-                    <label>Token Sistem</label>
-                    <div class="input-relative-wrapper">
+                <div class="input-field-block">
+                    <label>Token Akses Sistem</label>
+                    <div class="input-icon-wrapper">
                         <i class="fa-solid fa-key"></i>
-                        <input type="text" id="authSystemToken" placeholder="Masukkan token sistem..." required>
+                        <input type="text" id="authSystemToken" placeholder="Masukkan token rahasia..." required>
                     </div>
                 </div>
                 
-                <button class="btn-gate-submit" onclick="validateTripleAuth()">VERIFIKASI TRIPLE AKSES</button>
-                <p id="auth-error-msg" class="error-alert-text"></p>
+                <button class="btn-login-trigger" onclick="validateTripleAuth()">MASUK KE NODE AMAN</button>
+                <p id="auth-error-msg" class="error-alert-label"></p>
                 
-                <div class="demo-helper-box">
-                    Lupa rincian akun? <span onclick="fillDemoAccount()">Lihat Akun Demo</span>
+                <div class="demo-helper-link">
+                    Gunakan Uji Coba Cepat? <span onclick="fillDemoAccount()">Isi Data Demo</span>
                 </div>
-                <div style="margin-top: 25px; font-size: 11px; color: #b58371;">© 2026 Project Case Study - Cloud Security</div>
             </div>
+            <div class="login-footer-credits">© 2026 Project Case Study - Cloud Security</div>
         </div>
     </div>
 
@@ -69,7 +62,7 @@
 
         <aside id="sidebar-panel" class="sidebar">
             <div class="sidebar-brand">
-                <i class="fa-solid fa-cloud-shield"></i> Secure Cloud
+                <i class="fa-solid fa-cloud-shield"></i> CryptSafe
                 <button class="close-menu-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <ul class="sidebar-menu">
@@ -88,11 +81,11 @@
             <header class="content-header">
                 <div class="header-left">
                     <button class="hamburger-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
-                    <div class="header-title">Workspace Panel</div>
+                    <div class="header-title">Secure Space Control</div>
                 </div>
                 <div class="user-profile-badge">
                     <span>Halo, <strong id="dashboardDisplayUsername">-</strong>!</span>
-                    <div id="avatarLetter" class="avatar-circle" style="background:#633F34; color:#fff;">F</div>
+                    <div id="avatarLetter" class="avatar-circle">F</div>
                 </div>
             </header>
 
@@ -101,11 +94,11 @@
                     <div class="card-header"><h3><i class="fa-solid fa-circle-user"></i> Selamat Datang Kembali</h3></div>
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <i class="fa-solid fa-file-shield text-rose"></i>
+                            <i class="fa-solid fa-file-shield text-pink-accent"></i>
                             <div><h4 id="stat-total-files">0</h4><p>Berkas Pribadi Anda</p></div>
                         </div>
                         <div class="stat-card">
-                            <i class="fa-solid fa-user-lock text-brown"></i>
+                            <i class="fa-solid fa-user-lock text-brown-base"></i>
                             <div><h4 style="font-size: 14px; word-break: break-all;" id="user-session-node">Terisolasi</h4><p>Status Enklave Data</p></div>
                         </div>
                     </div>
@@ -113,7 +106,7 @@
 
                 <div id="tab-myfiles" class="card-box" style="display: none;">
                     <div class="card-header-flex">
-                        <h3>A. My Files (Hanya Milik Anda)</h3>
+                        <h3>My Files (Milik Anda)</h3>
                         <button class="btn-action" onclick="switchTab('upload')"><i class="fa-solid fa-plus"></i> Upload Baru</button>
                     </div>
                     <div class="table-responsive">
@@ -122,7 +115,7 @@
                                 <tr><th>Nama File</th><th>Status Proteksi</th><th>Aksi Dekripsi</th></tr>
                             </thead>
                             <tbody id="myFilesTableBody">
-                                <tr><td colspan="3" style="text-align:center; color:#999;">Memuat berkas eksklusif Anda...</td></tr>
+                                <tr><td colspan="3" style="text-align:center; color:#8c6a5e;">Memuat berkas eksklusif Anda...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -138,12 +131,12 @@
                         <label><i class="fa-solid fa-lock"></i> 2. Masukkan Kunci Kriptografi AES</label>
                         <input type="password" id="secretKey" placeholder="Password acak kunci berkas...">
                     </div>
-                    <button class="btn-main" style="background:#633F34; color:#fff; border:none;" id="uploadBtn" onclick="encryptAndUpload()"><i class="fa-solid fa-upload"></i> Enkripsi & Simpan Kunci</button>
+                    <button class="btn-action" id="uploadBtn" onclick="encryptAndUpload()"><i class="fa-solid fa-upload"></i> Enkripsi & Simpan Kunci</button>
                     <div id="uploadStatus" class="status-box"></div>
                 </div>
 
                 <div id="tab-shared" class="card-box" style="display: none;">
-                    <div class="card-header"><h3>D. Shared With Me</h3></div>
+                    <div class="card-header"><h3>Shared With Me</h3></div>
                     <div class="table-responsive">
                         <table class="modern-table">
                             <thead><tr><th>Nama File</th><th>Pengirim</th><th>Aksi</th></tr></thead>
@@ -153,7 +146,7 @@
                 </div>
 
                 <div id="tab-token" class="card-box" style="display: none;">
-                    <div class="card-header"><h3>B. Validasi Token & Akses Dekripsi</h3></div>
+                    <div class="card-header"><h3>Validasi Token & Akses Dekripsi</h3></div>
                     <div id="decryption-zone">
                         <p style="margin-bottom: 15px;">Target Berkas: <strong id="selectedFileName" style="color:#e56b6f;">Pilih Berkas di Menu My Files</strong></p>
                         <div class="form-group">
@@ -164,17 +157,17 @@
                             <label>Password Kunci AES Berkas:</label>
                             <input type="password" id="decryptSecretKey" placeholder="Password pembuat kunci berkas...">
                         </div>
-                        <button class="btn-main" style="background-color: #633F34; color:#fff; border:none;" onclick="downloadAndDecrypt()"><i class="fa-solid fa-download"></i> Cocokkan Token & Unduh Asli</button>
+                        <button class="btn-action" onclick="downloadAndDecrypt()"><i class="fa-solid fa-download"></i> Cocokkan Token & Unduh Asli</button>
                     </div>
                 </div>
 
                 <div id="tab-logs" class="card-box" style="display: none;">
-                    <div class="card-header"><h3>C. Activity Log Sistem</h3></div>
+                    <div class="card-header"><h3>Activity Log Sistem</h3></div>
                     <div class="table-responsive">
                         <table class="modern-table">
                             <thead><tr><th>Waktu</th><th>Aktivitas Cloud</th><th>Aksi Database</th></tr></thead>
                             <tbody id="logTableBody">
-                                <tr><td colspan="3" style="text-align:center; color:#999;">Memuat riwayat log pribadi Anda...</td></tr>
+                                <tr><td colspan="3" style="text-align:center; color:#8c6a5e;">Memuat riwayat log pribadi Anda...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -183,12 +176,12 @@
                 <div id="tab-profile" class="card-box" style="display: none;">
                     <div class="card-header"><h3><i class="fa-solid fa-id-card"></i> Informasi Node Pengguna</h3></div>
                     <div class="form-group">
-                        <label>Identitas Username:</label>
-                        <input type="text" id="profileUsername" style="background: #f4eae6; color: #633F34; font-weight:700;" readonly>
+                        <label>Identitas Username Pengguna:</label>
+                        <input type="text" id="profileUsername" class="profile-readonly-input" readonly>
                     </div>
                     <div class="form-group">
                         <label>Program Studi:</label>
-                        <select id="profileProdi" style="width: 100%; padding: 12px; border: 2px solid #f2e5e1; border-radius: 12px; background: #faf8f7; color:#633F34; font-weight:600;">
+                        <select id="profileProdi" class="profile-select-input">
                             <option value="Sistem Informasi">Sistem Informasi</option>
                             <option value="Teknik Informatika">Teknik Informatika</option>
                             <option value="Keamanan Siber (Cybersecurity)">Keamanan Siber (Cybersecurity)</option>
@@ -210,7 +203,7 @@
 
         function fillDemoAccount() {
             document.getElementById('authUsername').value = "fatma_ulfiana";
-            document.getElementById('authPassword').value = "rahasia123";
+            document.getElementById('authPassword').value = "bebas123";
             document.getElementById('authSystemToken').value = "UAS-RAHASIA-2026";
         }
 
@@ -219,6 +212,7 @@
             document.getElementById('sidebar-overlay').classList.toggle('open');
         }
 
+        // FUNGSI UTAMA VALIDASI MASUK (USERNAME & PASSWORD BEBAS, TOKEN WAJIB SAMA)
         function validateTripleAuth() {
             const usernameInput = document.getElementById('authUsername').value.trim();
             const passwordInput = document.getElementById('authPassword').value.trim();
@@ -231,18 +225,22 @@
                 return;
             }
 
-            if (passwordInput !== "rahasia123" || tokenInput !== "UAS-RAHASIA-2026") {
-                errorElement.innerText = "Password Akun atau Token Gerbang Salah! Akses Ditolak.";
+            // Memeriksa hanya Token Akses Kelas agar sistem aman dari pihak luar
+            if (tokenInput !== "UAS-RAHASIA-2026") {
+                errorElement.innerText = "Token Sistem tidak valid! Akses ditolak.";
                 errorElement.style.display = "block";
                 return;
             }
 
+            // Lolos Validasi: Set variabel global sesuai masukan pengguna
             loggedInUser = usernameInput;
             errorElement.style.display = "none";
             
+            // Pindah halaman
             document.getElementById('auth-page').style.display = 'none';
             document.getElementById('main-dashboard').style.display = 'flex';
             
+            // Sinkronisasi Data Identitas ke Seluruh Elemen Dashboard & Profile
             document.getElementById('dashboardDisplayUsername').innerText = loggedInUser;
             document.getElementById('profileUsername').value = loggedInUser;
             document.getElementById('avatarLetter').innerText = loggedInUser.charAt(0).toUpperCase();
@@ -323,9 +321,9 @@
                 if (dbError) {
                     alert("Database Error: " + dbError.message);
                 } else {
-                    statusDiv.innerHTML = `<div style='color:#2a9d8f; padding:12px; background:#e8f5e9; border-radius:8px; border: 1px solid #c8e6c9; margin-top:10px;'>
+                    statusDiv.innerHTML = `<div class='alert-success-box'>
                         <strong><i class='fa-solid fa-circle-check'></i> Upload Sukses Terisolasi!</strong><br>
-                        Token Berkas Baru Anda: <code style='font-size:15px; color:#c9184a; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #ccc;'>${generatedToken}</code><br>
+                        Token Berkas Baru Anda: <code>${generatedToken}</code><br>
                         <small>File ini hanya diizinkan muncul pada akun: <strong>@${loggedInUser}</strong>.</small>
                     </div>`;
                     fileInput.value = '';
@@ -357,8 +355,8 @@
             logBody.innerHTML = "";
 
             if (data.length === 0) {
-                fileTable.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Belum ada berkas terproteksi milik Anda.</td></tr>`;
-                logBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Riwayat log kosong.</td></tr>`;
+                fileTable.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#8c6a5e;">Belum ada berkas terproteksi milik Anda.</td></tr>`;
+                logBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#8c6a5e;">Riwayat log kosong.</td></tr>`;
                 return;
             }
 
@@ -368,7 +366,7 @@
                     <td>
                         <div style="display:flex; align-items:center; gap:10px; text-align:left;">
                             <i class="fa-solid fa-file-shield" style="color:#e56b6f; font-size:16px;"></i>
-                            <div><strong>${item.file_name}</strong><br><small style="color:#aaa;">Owner: @${item.username}</small></div>
+                            <div><strong>${item.file_name}</strong><br><small style="color:#8c6a5e;">Owner: @${item.username}</small></div>
                         </div>
                     </td>
                     <td><span class="badge-status">AES Encrypted</span></td>
@@ -382,7 +380,7 @@
                 const jam = new Date(item.uploaded_at).toLocaleTimeString('id-ID');
                 trLog.innerHTML = `
                     <td>${jam}</td>
-                    <td><span style="color:#2a9d8f; font-weight:600;">Uploaded (AES Encrypted)</span></td>
+                    <td><span style="color:#633F34; font-weight:700;">Uploaded (AES Encrypted)</span></td>
                     <td>Token ${item.access_token} committed into Database by @${item.username}</td>
                 `;
                 logBody.appendChild(trLog);
