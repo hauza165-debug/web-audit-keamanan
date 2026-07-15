@@ -24,7 +24,16 @@
             
             <div class="login-right">
                 <h2>SYSTEM ACCESS</h2>
-                <p class="login-instruction">Silakan masukkan token gerbang utama untuk membuka panel Workspace.</p>
+                <p class="login-instruction">Silakan masukkan username dan token valid untuk membuka panel Workspace.</p>
+                
+                <div class="input-box">
+                    <label>Username / Nama Pengguna</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="Masukkan nama Anda...">
+                    </div>
+                </div>
+
                 <div class="input-box">
                     <label>Token Sistem</label>
                     <div class="input-field">
@@ -32,8 +41,9 @@
                         <input type="text" id="accessToken" placeholder="Masukkan token sistem...">
                     </div>
                 </div>
+                
                 <button class="btn-main" onclick="verifySystemToken()">VERIFIKASI GERBANG AKSES</button>
-                <p id="token-error" class="error-msg" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i> Token Salah! Akses Sistem Ditolak.</p>
+                <p id="token-error" class="error-msg" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i> Data Tidak Valid! Periksa Username & Token Anda.</p>
                 <div class="request-token-area">
                     <p>Belum tahu token sistem? <a href="#" onclick="openModal()">Lihat Token Demo</a></p>
                 </div>
@@ -98,8 +108,8 @@
                     <div class="header-title">Workspace Panel</div>
                 </div>
                 <div class="user-profile-badge">
-                    <span class="user-name-text">Halo!</span>
-                    <div class="avatar-circle">F</div>
+                    <span>Halo, <strong id="dashboardDisplayUsername">-</strong>!</span>
+                    <div id="avatarLetter" class="avatar-circle">U</div>
                 </div>
             </header>
 
@@ -206,10 +216,31 @@
                 </div>
 
                 <div id="tab-profile" class="card-box" style="display: none;">
-                    <div class="card-header"><h3>Informasi Akun</h3></div>
-                    <p style="margin-bottom: 8px;"><strong>Nama Pengguna:</strong> Fatma Ulfiana</p>
-                    <p style="margin-bottom: 8px;"><strong>Program Studi:</strong> Sistem Informasi</p>
-                    <p><strong>Status Layanan:</strong> Supabase Cloud Free Tier (1 GB Storage)</p>
+                    <div class="card-header"><h3><i class="fa-solid fa-id-card"></i> Informasi Akun Pengguna</h3></div>
+                    
+                    <div class="form-group">
+                        <label>Nama Pengguna / Username:</label>
+                        <input type="text" id="profileUsername" class="disabled-style-input" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Program Studi:</label>
+                        <select id="profileProdi" style="width: 100%; padding: 12px; border: 2px solid #f2e5e1; border-radius: 12px; outline: none; background: #faf8f7; color: #4a2e27; font-weight: 600;">
+                            <option value="Sistem Informasi">Sistem Informasi</option>
+                            <option value="Teknik Informatika">Teknik Informatika</option>
+                            <option value="Keamanan Siber (Cybersecurity)">Keamanan Siber (Cybersecurity)</option>
+                            <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+                            <option value="Teknologi Informasi">Teknologi Informasi</option>
+                            <option value="Sains Data">Sains Data</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status Layanan Infrastruktur:</label>
+                        <p style="padding: 10px; background: #faf8f7; border-radius: 8px; font-size: 13px; border: 1px solid #f2e5e1;">
+                            <i class="fa-solid fa-cloud" style="color:#633F34;"></i> Supabase Cloud Connected (Free Tier Storage)
+                        </p>
+                    </div>
                 </div>
 
             </div>
@@ -231,11 +262,26 @@
             overlay.classList.toggle('open');
         }
 
+        // VERIFIKASI AKSES DAN PENERUSAN DATA USERNAME
         function verifySystemToken() {
-            const input = document.getElementById('accessToken').value.trim();
-            if (input === VALID_SYSTEM_TOKEN) {
+            const usernameInput = document.getElementById('loginUsername').value.trim();
+            const tokenInput = document.getElementById('accessToken').value.trim();
+            
+            if (!usernameInput) {
+                alert("Harap masukkan Username Anda terlebih dahulu!");
+                return;
+            }
+
+            if (tokenInput === VALID_SYSTEM_TOKEN) {
                 document.getElementById('token-page').style.display = 'none';
                 document.getElementById('main-dashboard').style.display = 'flex';
+                
+                // Set data dinamis di Dashboard & Profile
+                document.getElementById('dashboardDisplayUsername').innerText = usernameInput;
+                document.getElementById('profileUsername').value = usernameInput;
+                document.getElementById('avatarLetter').innerText = usernameInput.charAt(0).toUpperCase();
+                
+                document.getElementById('token-error').style.display = 'none';
                 fetchFileList();
             } else {
                 document.getElementById('token-error').style.display = 'block';
@@ -297,7 +343,7 @@
                     fetchFileList();
                 }
                 uploadBtn.disabled = false;
-            };
+            }
             reader.readAsDataURL(file);
         }
 
@@ -414,7 +460,6 @@
                 document.getElementById('menu-' + t).className = (t === tabId) ? 'active' : '';
             });
             
-            // Tutup sidebar otomatis di mobile setelah klik menu
             if (window.innerWidth <= 768) {
                 const sidebar = document.getElementById('sidebar-panel');
                 const overlay = document.getElementById('sidebar-overlay');
@@ -431,6 +476,7 @@
             document.getElementById('main-dashboard').style.display = 'none';
             document.getElementById('token-page').style.display = 'flex';
             document.getElementById('accessToken').value = '';
+            document.getElementById('loginUsername').value = '';
         }
 
         function openModal() { document.getElementById("tokenModal").style.display = "flex"; }
