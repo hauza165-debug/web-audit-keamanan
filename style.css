@@ -1,5 +1,5 @@
 /* ==========================================================================
-   RESET & CORE BRAND STYLING (PINK-COKLAT SOFT POLKADOT)
+   RESET & DASAR TEMA WARNA (KONTRAST TINGGI COKLAT & PINK)
    ========================================================================== */
 * {
     margin: 0;
@@ -10,17 +10,15 @@
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #fceade;
-    background-image: radial-gradient(#f7cad0 15%, transparent 16%);
-    background-size: 24px 24px;
-    color: #633F34;
+    background-color: #fcede6; /* Latar Belakang Pink Lembut */
+    color: #633F34; /* Font Coklat Tua Utama */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================================
-   DESAIN GATEWAY ACCESS (DUA KOLOM IKONIK - RESPONSIVE MOBILE)
+   TAMPILAN GATEWAY LOGIN PETAK TEGAS (RESPONSIVE HP)
    ========================================================================== */
 .login-wrapper {
     min-height: 100vh;
@@ -31,202 +29,145 @@ body {
     width: 100%;
 }
 
-.login-card {
+.login-card-box {
     background: #ffffff;
-    border-radius: 30px;
-    box-shadow: 0 20px 50px rgba(99, 63, 52, 0.15);
     width: 100%;
-    max-width: 940px;
-    min-height: 580px;
-    display: flex;
-    overflow: hidden;
-    border: 4px solid #633F34;
-}
-
-/* Kolom Kiri: Coklat Padat dengan Lingkaran Pink */
-.login-left {
-    flex: 1;
-    background: #633F34;
+    max-width: 480px;
+    padding: 40px 30px;
+    border: 4px solid #633F34; /* Border Petak Kotak */
+    box-shadow: 12px 12px 0px #633F34; /* Efek Neo-brutalism Kotak */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
+}
+
+.login-header-zone {
     text-align: center;
-    position: relative;
+    margin-bottom: 25px;
 }
 
-.circle-dashed-decor {
-    width: 190px;
-    height: 190px;
-    border: 3px dashed #f7cad0;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    margin-bottom: 30px;
+.login-icon-brand {
+    font-size: 42px;
+    color: #633F34;
+    margin-bottom: 12px;
 }
 
-.circle-dashed-decor span {
-    color: #faf0ed;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-}
-
-.circle-dashed-decor h1 {
-    color: #ffffff;
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-
-.brand-container-pill {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1.5px solid #f7cad0;
-    padding: 8px 20px;
-    border-radius: 50px;
-    color: #f7cad0;
-    font-weight: 700;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Kolom Kanan: Putih Bersih Simetris di Tengah */
-.login-right {
-    flex: 1.1;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: #ffffff;
-}
-
-.login-right h2 {
-    font-size: 24px;
+.login-header-zone h2 {
+    font-size: 22px;
     font-weight: 800;
     color: #633F34;
-    margin-bottom: 6px;
     letter-spacing: 0.5px;
+    margin-bottom: 8px;
 }
 
-.login-right p {
+.login-header-zone p {
     font-size: 13px;
     color: #8c6a5e;
-    line-height: 1.5;
-    margin-bottom: 25px;
-    max-width: 350px;
+    line-height: 1.6;
 }
 
-.input-group-container {
+.login-form-zone {
     width: 100%;
-    max-width: 360px;
-    margin-bottom: 15px;
-    text-align: left;
 }
 
-.input-group-container label {
-    font-size: 11px;
+.input-field-block {
+    margin-bottom: 18px;
+}
+
+.input-field-block label {
+    font-size: 12px;
     font-weight: 700;
     color: #633F34;
-    margin-bottom: 6px;
     display: block;
+    margin-bottom: 6px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
-.input-relative-wrapper {
+.input-icon-wrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.input-relative-wrapper i {
+.input-icon-wrapper i {
     position: absolute;
     left: 16px;
-    color: #b58371;
-    font-size: 15px;
-}
-
-.input-relative-wrapper input {
-    width: 100%;
-    padding: 12px 16px 12px 48px;
-    border: 2px solid #f2e5e1;
-    border-radius: 12px;
-    font-family: inherit;
-    font-size: 14px;
     color: #633F34;
-    background: #faf8f7;
-    transition: all 0.3s ease;
-    text-align: center;
-    font-weight: 600;
+    font-size: 16px;
 }
 
-.input-relative-wrapper input:focus {
-    outline: none;
-    border-color: #f7cad0;
-    background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(247, 202, 208, 0.4);
-}
-
-.btn-gate-submit {
+.input-icon-wrapper input {
     width: 100%;
-    max-width: 360px;
-    padding: 14px;
+    padding: 14px 16px 14px 46px;
+    border: 2px solid #633F34;
+    border-radius: 0px; /* Bentuk Petak Sempurna */
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #633F34;
+    background: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.input-icon-wrapper input:focus {
+    outline: none;
+    background: #fff0f2; /* Aksen Fokus Pink Tipis */
+    box-shadow: inset 0 0 0 2px #633F34;
+}
+
+.btn-login-trigger {
+    width: 100%;
+    padding: 15px;
     background: #633F34;
     color: #ffffff;
-    border: none;
-    border-radius: 12px;
+    border: 2px solid #633F34;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
     font-size: 14px;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(99, 63, 52, 0.2);
-    transition: all 0.2s ease;
-    margin-top: 5px;
+    margin-top: 10px;
+    transition: all 0.2s;
 }
 
-.btn-gate-submit:hover {
-    background: #4a2e27;
-    transform: translateY(-1px);
+.btn-login-trigger:hover {
+    background: #ffffff;
+    color: #633F34;
 }
 
-.demo-helper-box {
-    font-size: 12.5px;
+.demo-helper-link {
+    text-align: center;
+    font-size: 13px;
     font-weight: 600;
     color: #8c6a5e;
-    margin-top: 18px;
+    margin-top: 20px;
 }
 
-.demo-helper-box span {
-    color: #e56b6f;
-    text-decoration: none;
-    font-weight: 700;
+.demo-helper-link span {
+    color: #633F34;
+    text-decoration: underline;
+    font-weight: 800;
     cursor: pointer;
 }
 
-.demo-helper-box span:hover {
-    text-decoration: underline;
-}
-
-.error-alert-text {
-    color: #e56b6f;
-    font-size: 12px;
+.error-alert-label {
+    color: #b93737;
+    font-size: 13px;
     font-weight: 700;
-    margin-top: 10px;
+    margin-top: 12px;
+    text-align: center;
     display: none;
 }
 
+.login-footer-credits {
+    text-align: center;
+    font-size: 11px;
+    color: #8c6a5e;
+    margin-top: 25px;
+    font-weight: 500;
+}
+
 /* ==========================================================================
-   WORKSPACE UTAMA & DASHBOARD (SIDEBAR PINK-COKLAT ELEGAN)
+   STRUKTUR PANEL WORKSPACE (DASHBOARD)
    ========================================================================== */
 .workspace-wrapper {
     display: flex;
@@ -242,8 +183,8 @@ body {
     position: fixed;
     top: 0; bottom: 0; left: 0;
     z-index: 999;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-right: 4px solid #4a2e27;
+    transition: all 0.3s ease;
+    border-right: 4px solid #633F34;
 }
 
 .sidebar-brand {
@@ -252,8 +193,8 @@ body {
     font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: space-between;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 .close-menu-btn {
@@ -270,7 +211,6 @@ body {
 
 .sidebar-menu li {
     padding: 14px 16px;
-    border-radius: 12px;
     margin-bottom: 6px;
     cursor: pointer;
     display: flex;
@@ -278,7 +218,7 @@ body {
     gap: 14px;
     font-weight: 600;
     font-size: 14px;
-    color: #dfc7c0;
+    color: #f7cad0;
     transition: all 0.2s;
 }
 
@@ -291,7 +231,7 @@ body {
     color: #ffffff;
 }
 
-.logout-item { margin-top: auto; color: #f7cad0 !important; }
+.logout-item { margin-top: auto; color: #ffb3c1 !important; }
 
 .content-body {
     flex-grow: 1;
@@ -303,7 +243,6 @@ body {
 .content-header {
     background: #ffffff;
     padding: 16px 24px;
-    border-radius: 18px;
     border: 3px solid #633F34;
     display: flex;
     align-items: center;
@@ -315,13 +254,14 @@ body {
 .hamburger-btn { display: none; background: none; border: none; color: #633F34; font-size: 22px; cursor: pointer; }
 .header-title { font-size: 18px; font-weight: 800; color: #633F34; }
 
+.user-profile-badge { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: #633F34; }
+.avatar-circle { width: 36px; height: 36px; background: #633F34; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; border: 2px solid #633F34; }
 
-.user-profile-badge { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; }
-.avatar-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; border: 2px solid #633F34; }
-
+/* ==========================================================================
+   CARD TAMPILAN KONTEN & ELEMEN TABEL KOTAK
+   ========================================================================== */
 .card-box {
     background: #ffffff;
-    border-radius: 20px;
     border: 3px solid #633F34;
     padding: 30px;
     margin-bottom: 25px;
@@ -330,15 +270,54 @@ body {
 .card-header, .card-header-flex { margin-bottom: 20px; }
 .card-header-flex { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
 .card-box h3 { font-size: 18px; font-weight: 800; color: #633F34; display: flex; align-items: center; gap: 10px; }
-.card-desc { font-size: 13px; color: #8c6a5e; margin-bottom: 20px; line-height: 1.5; }
 
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-.stat-card { background: #faf8f7; border: 2px solid #f2e5e1; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 20px; }
+.stat-card { background: #ffffff; border: 2px solid #633F34; padding: 20px; display: flex; align-items: center; gap: 20px; }
 .stat-card i { font-size: 32px; }
-.text-rose { color: #e56b6f; }
-.text-brown { color: #633F34; }
+.text-pink-accent { color: #e56b6f; }
+.text-brown-base { color: #633F34; }
 .stat-card h4 { font-size: 22px; font-weight: 800; color: #633F34; }
 .stat-card p { font-size: 12px; color: #8c6a5e; font-weight: 600; }
 
 .form-group { margin-bottom: 20px; text-align: left; }
-.form-group label { font-size: 13px;
+.form-group label { font-size: 13px; font-weight: 700; color: #633F34; margin-bottom: 8px; display: block; }
+.form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid #633F34; background: #ffffff; font-family: inherit; color: #633F34; font-weight: 600; }
+
+.profile-readonly-input { background: #fcedea !important; color: #633F34 !important; }
+.profile-select-input { cursor: pointer; }
+
+.table-responsive { width: 100%; overflow-x: auto; border: 2px solid #633F34; }
+.modern-table { width: 100%; border-collapse: collapse; text-align: left; background: #ffffff; font-size: 14px; }
+.modern-table th { background: #fcedea; padding: 16px; font-weight: 700; color: #633F34; border-bottom: 2px solid #633F34; }
+.modern-table td { padding: 16px; border-bottom: 1px solid #633F34; color: #633F34; font-weight: 500; }
+
+.btn-action { background: #633F34; color: #ffffff; border: none; padding: 12px 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
+.btn-copy { background: #ffffff; border: 2px solid #633F34; color: #633F34; padding: 8px 14px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.btn-copy:hover { background: #633F34; color: #ffffff; }
+
+.sidebar-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(99, 63, 52, 0.4); z-index: 998; backdrop-filter: blur(4px);
+}
+
+.badge-status { background: #e8f5e9; color: #2a9d8f; font-weight: 700; padding: 4px 10px; border: 1px solid #2a9d8f; font-size: 11px; }
+
+.alert-success-box { color:#2a9d8f; padding:12px; background:#e8f5e9; border: 2px solid #2a9d8f; margin-top:10px; font-size:13px; }
+.alert-success-box code { font-size:14px; color:#b93737; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #633F34; }
+
+/* ==========================================================================
+   RESPONSIF TAMPILAN SELULER (HP / MOBILE OPTIMIZED)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .login-card-box {
+        padding: 30px 20px;
+        box-shadow: 6px 6px 0px #633F34; /* Perkecil bayangan di HP */
+    }
+    .sidebar { left: -260px; }
+    .sidebar.open { left: 0; }
+    .sidebar-overlay.open { display: block; }
+    .close-menu-btn, .hamburger-btn { display: block; }
+    .content-body { margin-left: 0; padding: 15px; }
+    .content-header { padding: 12px 16px; margin-bottom: 20px; }
+    .card-box { padding: 20px 15px; }
+}
