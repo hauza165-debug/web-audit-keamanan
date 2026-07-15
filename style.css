@@ -310,4 +310,19 @@ body {
 
     .card-box { padding: 20px; }
     .stats-grid { grid-template-columns: 1fr; gap: 12px; } /* Stat Card menumpuk vertikal */
+
+    /* Gaya input teks readonly pada halaman profile */
+.disabled-style-input {
+    background: #f4eae6 !important;
+    color: #633F34 !important;
+    font-weight: 700;
+    cursor: not-allowed;
+    border-color: #d1c2be !important;
+}
+
+/* Mengoptimalkan dropdown select prodi */
+select:focus {
+    border-color: #e56b6f !important;
+    box-shadow: 0 0 0 3px rgba(229, 107, 111, 0.1);
+}
 }
