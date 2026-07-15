@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Cloud File Storage (AES)</title>
+    <title>Secure Cloud Storage (AES-256 & Supabase)</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -18,30 +17,27 @@
             <div class="login-left">
                 <div class="circle-badge">
                     <span class="case-title">Case Study</span>
-                    <span class="case-sub">FILE SECURITY AES</span>
+                    <span class="case-sub">AES-256</span>
                 </div>
-                <div class="secure-badge"><i class="fa-solid fa-lock"></i> Keamanan Informasi</div>
+                <div class="secure-badge"><i class="fa-solid fa-shield-halved"></i> CryptSafe Cloud v3</div>
             </div>
             
             <div class="login-right">
-                <h2>ACCESS TOKEN</h2>
-                <p class="login-instruction">Silakan masukkan token akses valid untuk masuk ke Cloud Storage aman.</p>
-                
+                <h2>SYSTEM ACCESS</h2>
+                <p class="login-instruction">Silakan masukkan token gerbang utama untuk membuka panel Workspace.</p>
                 <div class="input-box">
-                    <label>Token Akses</label>
+                    <label>Token Sistem</label>
                     <div class="input-field">
                         <i class="fa-solid fa-key"></i>
-                        <input type="text" id="accessToken" placeholder="Masukkan token akses Anda...">
+                        <input type="text" id="accessToken" placeholder="Masukkan token sistem...">
                     </div>
                 </div>
-                
-                <button class="btn-main" onclick="verifyToken()">VERIFIKASI AKSES</button>
-                <p id="token-error" class="error-msg" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i> Token Salah! Akses Ditolak.</p>
-                
+                <button class="btn-main" onclick="verifySystemToken()">VERIFIKASI GERBANG AKSES</button>
+                <p id="token-error" class="error-msg" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i> Token Salah! Akses Sistem Ditolak.</p>
                 <div class="request-token-area">
-                    <p>Belum tahu token Anda? <a href="#" onclick="openModal()">Klik di sini untuk melihat Token Demo</a></p>
+                    <p>Belum tahu token sistem? <a href="#" onclick="openModal()">Lihat Token Demo</a></p>
                 </div>
-                <div class="footer-note">© 2026 Tugas Project Case Study</div>
+                <div class="footer-note">© 2026 Project Case Study - Cloud Security</div>
             </div>
         </div>
     </div>
@@ -49,8 +45,8 @@
     <div id="tokenModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h3><i class="fa-solid fa-info-circle"></i> Token Akses Demo</h3>
-            <p>Gunakan token berikut untuk simulasi verifikasi:</p>
+            <h3><i class="fa-solid fa-info-circle"></i> Token Akses Gerbang</h3>
+            <p>Gunakan token sistem berikut untuk masuk ke dashboard utama:</p>
             <div class="token-display-box">
                 <code id="demoTokenText">UAS-RAHASIA-2026</code>
                 <button onclick="copyToken()" class="btn-copy"><i class="fa-solid fa-copy"></i> Salin</button>
@@ -58,92 +54,194 @@
         </div>
     </div>
 
+    <div id="main-dashboard" class="workspace-wrapper" style="display: none;">
+        
+        <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
-    <div id="main-dashboard" style="display: none;">
-        <nav class="navbar">
-            <div class="nav-brand">
-                <i class="fa-solid fa-shield-halved"></i> CryptSafe Cloud
+        <aside id="sidebar-panel" class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-cloud-shield"></i> Secure Cloud
+                <button class="close-menu-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <ul class="nav-links">
-                <li class="active" id="menu-encrypt"><a href="#" onclick="switchTab('encrypt')"><i class="fa-solid fa-cloud-arrow-up"></i> Upload & Enkripsi</a></li>
-                <li id="menu-files"><a href="#" onclick="switchTab('files')"><i class="fa-solid fa-folder-open"></i> Daftar File Cloud</a></li>
-                <li><a href="#" class="logout-link" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a></li>
+            <ul class="sidebar-menu">
+                <li id="menu-dashboard" class="active" onclick="switchTab('dashboard')">
+                    <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+                </li>
+                <li id="menu-myfiles" onclick="switchTab('myfiles')">
+                    <i class="fa-solid fa-folder-open"></i> <span>My Files</span>
+                </li>
+                <li id="menu-upload" onclick="switchTab('upload')">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> <span>Upload File</span>
+                </li>
+                <li id="menu-shared" onclick="switchTab('shared')">
+                    <i class="fa-solid fa-user-group"></i> <span>Shared With Me</span>
+                </li>
+                <li id="menu-token" onclick="switchTab('token')">
+                    <i class="fa-solid fa-key"></i> <span>Token Access</span>
+                </li>
+                <li id="menu-logs" onclick="switchTab('logs')">
+                    <i class="fa-solid fa-clock-rotate-left"></i> <span>Activity Log</span>
+                </li>
+                <li id="menu-profile" onclick="switchTab('profile')">
+                    <i class="fa-solid fa-user"></i> <span>Profile</span>
+                </li>
+                <li class="logout-item" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+                </li>
             </ul>
-        </nav>
+        </aside>
 
-        <div class="dashboard-container">
-            
-            <div id="encrypt-tab" class="card-box">
-                <div class="card-header">
-                    <i class="fa-solid fa-file-shield"></i>
-                    <h3>Upload ke Cloud Storage Aman</h3>
+        <main class="content-body">
+            <header class="content-header">
+                <div class="header-left">
+                    <button class="hamburger-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
+                    <div class="header-title">Workspace Panel</div>
                 </div>
-                <br>
-                <div class="form-group">
-                    <label><i class="fa-solid fa-file-arrow-up"></i> 1. Pilih File</label>
-                    <input type="file" id="fileInput">
+                <div class="user-profile-badge">
+                    <span class="user-name-text">Halo!</span>
+                    <div class="avatar-circle">F</div>
                 </div>
-                <div class="form-group">
-                    <label><i class="fa-solid fa-lock"></i> 2. Masukkan Password AES</label>
-                    <input type="password" id="secretKey" placeholder="Masukkan password pengunci file...">
-                </div>
-                <button class="btn-main" id="uploadBtn" onclick="encryptAndUpload()"><i class="fa-solid fa-upload"></i> Enkripsi & Upload ke Cloud</button>
-                <div id="uploadStatus" style="margin-top:10px; font-weight:bold; color:#27ae60; text-align:center;"></div>
-            </div>
+            </header>
 
-            <div id="files-tab" class="card-box" style="display: none;">
-                <div class="card-header" style="background-color: #7b5043;">
-                    <i class="fa-solid fa-server"></i>
-                    <h3>Sistem Menampilkan Daftar File Cloud</h3>
-                </div>
-                <br>
-                <p class="card-desc">Pilih file terenkripsi dari cloud di bawah untuk memulai proses unduh dan dekripsi.</p>
+            <div class="container-fluid">
                 
-                <ul id="fileListContainer" class="file-list-group">
-                    <li style="text-align:center; color:#999;">Memuat data file dari cloud...</li>
-                </ul>
-
-                <hr style="margin:20px 0; border:1px dashed #4a2e27;">
-                
-                <div id="decryption-zone" style="display:none;">
-                    <h4><i class="fa-solid fa-unlock-keyhole"></i> Area Dekripsi Berkas</h4>
-                    <p style="font-size:13px; margin-bottom:10px;">File terpilih: <strong id="selectedFileName" style="color:#c9184a;">-</strong></p>
-                    <div class="form-group">
-                        <label>Masukkan Password AES untuk Mendekripsi:</label>
-                        <input type="password" id="decryptSecretKey" placeholder="Password saat upload...">
+                <div id="tab-dashboard" class="card-box">
+                    <div class="card-header"><h3><i class="fa-solid fa-gauge-high"></i> Dashboard Ringkasan</h3></div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fa-solid fa-file-shield text-rose"></i>
+                            <div><h4 id="stat-total-files">0</h4><p>Total File Saya</p></div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-database text-brown"></i>
+                            <div><h4>2.45 GB / 5 GB</h4><p>Penyimpanan Awan</p></div>
+                        </div>
                     </div>
-                    <button class="btn-main" style="background-color: #7b5043;" onclick="downloadAndDecrypt()"><i class="fa-solid fa-download"></i> Dekripsi & Dapatkan File Asli</button>
                 </div>
-            </div>
 
-        </div>
+                <div id="tab-myfiles" class="card-box" style="display: none;">
+                    <div class="card-header-flex">
+                        <h3>A. My Files (Daftar File Saya)</h3>
+                        <button class="btn-action" onclick="switchTab('upload')"><i class="fa-solid fa-plus"></i> Upload File</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama File</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myFilesTableBody">
+                                <tr><td colspan="3" style="text-align:center; color:#999;">Memuat berkas dari cloud...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-upload" class="card-box" style="display: none;">
+                    <div class="card-header"><h3><i class="fa-solid fa-file-shield"></i> Proteksi & Upload ke Supabase</h3></div>
+                    <p class="card-desc">Berkas akan dienkripsi secara aman menggunakan client-side AES sebelum dikirim ke Storage Cloud.</p>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-file-arrow-up"></i> 1. Pilih Berkas</label>
+                        <input type="file" id="fileInput">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-lock"></i> 2. Masukkan Kunci Kriptografi AES</label>
+                        <input type="password" id="secretKey" placeholder="Password untuk mengunci berkas...">
+                    </div>
+                    <button class="btn-main" id="uploadBtn" onclick="encryptAndUpload()"><i class="fa-solid fa-upload"></i> Enkripsi & Kirim Berkas</button>
+                    <div id="uploadStatus" class="status-box"></div>
+                </div>
+
+                <div id="tab-shared" class="card-box" style="display: none;">
+                    <div class="card-header"><h3>D. Shared With Me</h3></div>
+                    <div class="table-responsive">
+                        <table class="modern-table">
+                            <thead>
+                                <tr><th>Nama File</th><th>Dibagikan Oleh</th><th>Aksi</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Materi_Kuliah.pdf</td>
+                                    <td>dina@gmail.com</td>
+                                    <td><button class="btn-copy" style="padding:4px 8px;"><i class="fa-solid fa-download"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-token" class="card-box" style="display: none;">
+                    <div class="card-header"><h3>B. Token Access Management & Dekripsi Berkas</h3></div>
+                    <p class="card-desc">Pilih berkas dari tab <strong>My Files</strong> terlebih dahulu, lalu masukkan parameter di bawah untuk memvalidasi token database dan mendekripsi file asli.</p>
+                    
+                    <div id="decryption-zone">
+                        <p style="font-size:13px; margin-bottom:15px;">Berkas Terpilih: <strong id="selectedFileName" style="color:#e56b6f;">Silakan Pilih Berkas di Menu My Files</strong></p>
+                        <div class="form-group">
+                            <label>Masukkan Token Akses Unik:</label>
+                            <input type="text" id="inputAccessToken" placeholder="Contoh: TOK-123456">
+                        </div>
+                        <div class="form-group">
+                            <label>Masukkan Password Kunci AES:</label>
+                            <input type="password" id="decryptSecretKey" placeholder="Password saat proses enkripsi upload...">
+                        </div>
+                        <button class="btn-main" style="background-color: #633F34;" onclick="downloadAndDecrypt()"><i class="fa-solid fa-download"></i> Cocokkan Token & Unduh Asli</button>
+                    </div>
+                </div>
+
+                <div id="tab-logs" class="card-box" style="display: none;">
+                    <div class="card-header"><h3>C. Activity Log Sistem</h3></div>
+                    <div class="table-responsive">
+                        <table class="modern-table">
+                            <thead>
+                                <tr><th>Waktu</th><th>Aktivitas Cloud</th><th>Aksi Database</th></tr>
+                            </thead>
+                            <tbody id="logTableBody">
+                                <tr><td colspan="3" style="text-align:center; color:#999;">Memuat aktivitas log...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-profile" class="card-box" style="display: none;">
+                    <div class="card-header"><h3>Informasi Akun</h3></div>
+                    <p style="margin-bottom: 8px;"><strong>Nama Pengguna:</strong> Fatma Ulfiana</p>
+                    <p style="margin-bottom: 8px;"><strong>Program Studi:</strong> Sistem Informasi</p>
+                    <p><strong>Status Layanan:</strong> Supabase Cloud Free Tier (1 GB Storage)</p>
+                </div>
+
+            </div>
+        </main>
     </div>
 
     <script>
         const SUPABASE_URL = "https://espisnaefzoinivsrabc.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_QEHg3MvED_qomoiYzTcLTA_5M4xGnrY";
-        
-        // Inisialisasi Klien Supabase (Deklarasi tunggal, bersih dari eror ganda)
         const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const VALID_TOKEN = "UAS-RAHASIA-2026";
+        
+        const VALID_SYSTEM_TOKEN = "UAS-RAHASIA-2026";
         let currentSelectedFile = null;
 
-        // ALUR LOGIN: VERIFIKASI TOKEN
-        function verifyToken() {
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar-panel');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        function verifySystemToken() {
             const input = document.getElementById('accessToken').value.trim();
-            if (input === VALID_TOKEN) {
+            if (input === VALID_SYSTEM_TOKEN) {
                 document.getElementById('token-page').style.display = 'none';
-                document.getElementById('main-dashboard').style.display = 'block';
-                document.body.style.backgroundImage = 'none'; 
-                document.body.style.backgroundColor = '#fbf6f5';
+                document.getElementById('main-dashboard').style.display = 'flex';
                 fetchFileList();
             } else {
                 document.getElementById('token-error').style.display = 'block';
             }
         }
 
-        // ALUR UPLOAD: ENKRIPSI AES & UPLOAD KE SUPABASE STORAGE
         function encryptAndUpload() {
             const fileInput = document.getElementById('fileInput');
             const secretKey = document.getElementById('secretKey').value;
@@ -151,75 +249,196 @@
             const statusDiv = document.getElementById('uploadStatus');
 
             if (fileInput.files.length === 0 || !secretKey) {
-                alert("Pilih file dan isi Password AES!");
+                alert("Pilih file dan tentukan Password AES!");
                 return;
             }
 
             const file = fileInput.files[0];
             uploadBtn.disabled = true;
-            statusDiv.innerText = "Sedang mengenkripsi file...";
+            statusDiv.style.display = "block";
+            statusDiv.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Proses enkripsi AES-256 berkas...";
 
             const reader = new FileReader();
             reader.onload = async function(e) {
                 const fileData = e.target.result;
-                
-                // 1. Proses Enkripsi AES-256
                 const encryptedData = CryptoJS.AES.encrypt(fileData, secretKey).toString();
                 const blob = new Blob([encryptedData], {type: "text/plain"});
                 
-                const encryptedFileName = file.name + ".enc";
-                statusDiv.innerText = "Mengunggah ke Supabase Cloud Storage...";
+                const encryptedFileName = Date.now() + "_" + file.name + ".enc";
+                statusDiv.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Mengirim paket ke Supabase Storage...";
 
-                // 2. Upload Berkas ke Supabase Storage Bucket 'web_keamanan'
-                const { data, error } = await sbClient.storage
+                const { data: storageData, error: storageError } = await sbClient.storage
                     .from('web_keamanan')
-                    .upload(encryptedFileName, blob, { cacheControl: '3600', upsert: true });
+                    .upload(encryptedFileName, blob);
 
-                if (error) {
-                    console.error(error);
-                    alert("Gagal mengunggah file ke cloud storage: " + error.message);
-                    uploadBtn.disabled = false;
-                    statusDiv.innerText = "";
+                if (storageError) {
+                    alert("Storage Error: " + storageError.message);
+                    resetUploadUI();
+                    return;
+                }
+
+                statusDiv.innerHTML = "<i class='fa-solid fa-database'></i> Sinkronisasi token ke database metadata...";
+                const generatedToken = "TOK-" + Math.floor(100000 + Math.random() * 900000);
+
+                const { error: dbError } = await sbClient
+                    .from('file_metadata')
+                    .insert([{ file_name: file.name, storage_path: encryptedFileName, access_token: generatedToken }]);
+
+                if (dbError) {
+                    alert("Database Metadata Error: " + dbError.message);
                 } else {
-                    statusDiv.innerText = "Upload Berhasil!";
-                    uploadBtn.disabled = false;
+                    statusDiv.innerHTML = `<div style='color:#2a9d8f; padding:12px; background:#e8f5e9; border-radius:8px; border: 1px solid #c8e6c9; margin-top:10px;'>
+                        <strong><i class='fa-solid fa-circle-check'></i> Sinkronisasi Selesai!</strong><br>
+                        Token Akses Berkas: <code style='font-size:15px; color:#c9184a; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #ccc;'>${generatedToken}</code><br>
+                        <small>Gunakan token database di atas untuk proses unduh di tab Token Access.</small>
+                    </div>`;
                     fileInput.value = '';
                     document.getElementById('secretKey').value = '';
                     fetchFileList();
-                    alert("Sukses! File aman terenkripsi berhasil disimpan di Supabase Cloud.");
-                    setTimeout(() => statusDiv.innerText = "", 3000);
                 }
+                uploadBtn.disabled = false;
             };
             reader.readAsDataURL(file);
         }
 
-        // ALUR DAFTAR FILE: MEMBACA DAFTAR FILE LANGSUNG DARI BUCKET SUPABASE
         async function fetchFileList() {
-            const container = document.getElementById('fileListContainer');
-            container.innerHTML = `<li style="text-align:center; color:#999;">Memuat data file dari cloud...</li>`;
+            const fileTable = document.getElementById('myFilesTableBody');
+            const logBody = document.getElementById('logTableBody');
+            const totalStat = document.getElementById('stat-total-files');
             
-            const { data, error } = await sbClient.storage.from('web_keamanan').list();
+            const { data, error } = await sbClient.from('file_metadata').select('*').order('uploaded_at', { ascending: false });
 
             if (error) {
-                console.error(error);
-                container.innerHTML = `<li style="text-align:center; color:#c9184a;">Gagal memuat file dari server cloud. Pastikan aturan Policies sudah dikonfigurasi!</li>`;
+                fileTable.innerHTML = `<tr><td colspan="3">Gagal sinkronisasi data cloud.</td></tr>`;
                 return;
             }
 
-            container.innerHTML = "";
-            if (!data || data.length === 0) {
-                container.innerHTML = `<li style="text-align:center; color:#999;">Belum ada file terenkripsi di cloud.</li>`;
+            totalStat.innerText = data.length;
+            fileTable.innerHTML = "";
+            logBody.innerHTML = "";
+
+            if (data.length === 0) {
+                fileTable.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Belum ada berkas terproteksi.</td></tr>`;
+                logBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Riwayat log kosong.</td></tr>`;
                 return;
             }
-            
+
             data.forEach(item => {
-                if(item.name === '.emptyFolderPlaceholder') return;
+                const trFile = document.createElement('tr');
+                trFile.innerHTML = `
+                    <td>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fa-solid fa-file-shield" style="color:#e56b6f; font-size:16px;"></i>
+                            <div><strong>${item.file_name}</strong><br><small style="color:#aaa; word-break: break-all;">Path: ${item.storage_path}</small></div>
+                        </div>
+                    </td>
+                    <td><span class="badge-status">Encrypted</span></td>
+                    <td>
+                        <button class="btn-copy" title="Proses Dekripsi" onclick="selectForDecrypt('${item.id}')"><i class="fa-solid fa-unlock-keyhole"></i> Prosedur Dekripsi</button>
+                    </td>
+                `;
+                fileTable.appendChild(trFile);
 
-                const li = document.createElement('li');
-                li.className = "file-item";
-                
-                const displayName = item.name.endsWith('.enc') ? item.name.slice(0, -4) : item.name;
-                li.innerHTML = `<i class="fa-solid fa-file-code"></i> <span>${displayName} (.enc)</span>`;
-                
-                li.onclick = () => {
-                    const { data: urlData } = sbClient.storage.from('web_keamanan').getPublicUrl(item.name);
+                const trLog = document.createElement('tr');
+                const jam = new Date(item.uploaded_at).toLocaleTimeString('id-ID');
+                trLog.innerHTML = `
+                    <td>${jam}</td>
+                    <td><span style="color:#2a9d8f; font-weight:600;">Uploaded</span> (AES Encrypted)</td>
+                    <td>Token ${item.access_token} committed into Database</td>
+                `;
+                logBody.appendChild(trLog);
+            });
+        }
+
+        async function selectForDecrypt(id) {
+            const { data } = await sbClient.from('file_metadata').select('*').eq('id', id).single();
+            if(data) {
+                currentSelectedFile = data;
+                document.getElementById('selectedFileName').innerText = data.file_name;
+                switchTab('token');
+            }
+        }
+
+        function downloadAndDecrypt() {
+            const inputToken = document.getElementById('inputAccessToken').value.trim();
+            const secretKey = document.getElementById('decryptSecretKey').value;
+
+            if (!currentSelectedFile) {
+                alert("Pilih file terlebih dahulu di menu My Files!");
+                return;
+            }
+            if (!inputToken || !secretKey) {
+                alert("Isi token database dan sandi dekripsi AES!");
+                return;
+            }
+
+            if (inputToken !== currentSelectedFile.access_token) {
+                alert("Akses Ditolak! Token tidak terdaftar di database untuk file ini.");
+                return;
+            }
+
+            const { data: urlData } = sbClient.storage.from('web_keamanan').getPublicUrl(currentSelectedFile.storage_path);
+
+            fetch(urlData.publicUrl)
+                .then(res => res.text())
+                .then(ciphertext => {
+                    try {
+                        const decryptedBytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+                        const originalData = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+                        if (!originalData || originalData.trim() === "") throw new Error();
+
+                        const link = document.createElement("a");
+                        link.href = originalData;
+                        link.download = currentSelectedFile.file_name;
+                        link.click();
+                        
+                        alert("Validasi Berhasil & File Asli Siap Diunduh!");
+                        document.getElementById('inputAccessToken').value = "";
+                        document.getElementById('decryptSecretKey').value = "";
+                    } catch (e) {
+                        alert("Token Valid, namun Password Kunci AES Salah!");
+                    }
+                }).catch(() => alert("Gagal mengambil paket biner file dari storage cloud."));
+        }
+
+        function resetUploadUI() {
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('uploadStatus').style.display = "none";
+        }
+
+        function switchTab(tabId) {
+            const tabs = ['dashboard', 'myfiles', 'upload', 'shared', 'token', 'logs', 'profile'];
+            tabs.forEach(t => {
+                document.getElementById('tab-' + t).style.display = (t === tabId) ? 'block' : 'none';
+                document.getElementById('menu-' + t).className = (t === tabId) ? 'active' : '';
+            });
+            
+            // Tutup sidebar otomatis di mobile setelah klik menu
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar-panel');
+                const overlay = document.getElementById('sidebar-overlay');
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+            }
+
+            if(tabId === 'myfiles' || tabId === 'dashboard' || tabId === 'logs') {
+                fetchFileList();
+            }
+        }
+
+        function logout() {
+            document.getElementById('main-dashboard').style.display = 'none';
+            document.getElementById('token-page').style.display = 'flex';
+            document.getElementById('accessToken').value = '';
+        }
+
+        function openModal() { document.getElementById("tokenModal").style.display = "flex"; }
+        function closeModal() { document.getElementById("tokenModal").style.display = "none"; }
+        function copyToken() {
+            navigator.clipboard.writeText(document.getElementById("demoTokenText").innerText);
+            alert("Token Gerbang disalin!");
+        }
+    </script>
+</body>
+</html>
