@@ -1,323 +1,320 @@
-/* ==========================================================================
-   RESET & DASAR TEMA WARNA (KONTRAST TINGGI COKLAT & PINK)
-   ========================================================================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
+   /* ==========================================================================
+           RESET & DASAR TEMA WARNA (KONTRAST TINGGI COKLAT & PINK)
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #fcede6; /* Latar Belakang Pink Lembut */
-    color: #633F34; /* Font Coklat Tua Utama */
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fcedea; /* Latar Belakang Pink Lembut Murni */
+            color: #633F34; /* Font Coklat Tua Utama */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-/* ==========================================================================
-   TAMPILAN GATEWAY LOGIN PETAK TEGAS (RESPONSIVE HP)
-   ========================================================================== */
-.login-wrapper {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    width: 100%;
-}
+        /* ==========================================================================
+           TAMPILAN GATEWAY LOGIN PETAK TEGAS COKLAT & PINK (RESPONSIVE HP)
+           ========================================================================== */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+        }
 
-.login-card-box {
-    background: #ffffff;
-    width: 100%;
-    max-width: 480px;
-    padding: 40px 30px;
-    border: 4px solid #633F34; /* Border Petak Kotak */
-    box-shadow: 12px 12px 0px #633F34; /* Efek Neo-brutalism Kotak */
-    display: flex;
-    flex-direction: column;
-}
+        .login-card-box {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 30px;
+            border: 4px solid #633F34; /* Border Petak Kotak Tegas */
+            box-shadow: 12px 12px 0px #633F34; /* Efek Neo-brutalism Kotak */
+            display: flex;
+            flex-direction: column;
+        }
 
-.login-header-zone {
-    text-align: center;
-    margin-bottom: 25px;
-}
+        .login-header-zone {
+            text-align: center;
+            margin-bottom: 25px;
+        }
 
-.login-icon-brand {
-    font-size: 42px;
-    color: #633F34;
-    margin-bottom: 12px;
-}
+        .login-icon-brand {
+            font-size: 42px;
+            color: #633F34;
+            margin-bottom: 12px;
+        }
 
-.login-header-zone h2 {
-    font-size: 22px;
-    font-weight: 800;
-    color: #633F34;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-}
+        .login-header-zone h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #633F34;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
 
-.login-header-zone p {
-    font-size: 13px;
-    color: #8c6a5e;
-    line-height: 1.6;
-}
+        .login-header-zone p {
+            font-size: 13px;
+            color: #8c6a5e;
+            line-height: 1.6;
+        }
 
-.login-form-zone {
-    width: 100%;
-}
+        .login-form-zone {
+            width: 100%;
+        }
 
-.input-field-block {
-    margin-bottom: 18px;
-}
+        .input-field-block {
+            margin-bottom: 18px;
+        }
 
-.input-field-block label {
-    font-size: 12px;
-    font-weight: 700;
-    color: #633F34;
-    display: block;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-}
+        .input-field-block label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #633F34;
+            display: block;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
 
-.input-icon-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
+        .input-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
-.input-icon-wrapper i {
-    position: absolute;
-    left: 16px;
-    color: #633F34;
-    font-size: 16px;
-}
+        .input-icon-wrapper i {
+            position: absolute;
+            left: 16px;
+            color: #633F34;
+            font-size: 16px;
+        }
 
-.input-icon-wrapper input {
-    width: 100%;
-    padding: 14px 16px 14px 46px;
-    border: 2px solid #633F34;
-    border-radius: 0px; /* Bentuk Petak Sempurna */
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #633F34;
-    background: #ffffff;
-    transition: all 0.2s ease;
-}
+        .input-icon-wrapper input {
+            width: 100%;
+            padding: 14px 16px 14px 46px;
+            border: 2px solid #633F34;
+            border-radius: 0px; /* Bentuk Petak Sempurna */
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #633F34;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
 
-.input-icon-wrapper input:focus {
-    outline: none;
-    background: #fff0f2; /* Aksen Fokus Pink Tipis */
-    box-shadow: inset 0 0 0 2px #633F34;
-}
+        .input-icon-wrapper input:focus {
+            outline: none;
+            background: #fcedea; /* Aksen Fokus Pink Tipis */
+            box-shadow: inset 0 0 0 1px #633F34;
+        }
 
-.btn-login-trigger {
-    width: 100%;
-    padding: 15px;
-    background: #633F34;
-    color: #ffffff;
-    border: 2px solid #633F34;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: all 0.2s;
-}
+        .btn-login-trigger {
+            width: 100%;
+            padding: 15px;
+            background: #633F34;
+            color: #ffffff;
+            border: 2px solid #633F34;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
 
-.btn-login-trigger:hover {
-    background: #ffffff;
-    color: #633F34;
-}
+        .btn-login-trigger:hover {
+            background: #ffffff;
+            color: #633F34;
+        }
 
-.demo-helper-link {
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    color: #8c6a5e;
-    margin-top: 20px;
-}
+        .demo-helper-link {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #8c6a5e;
+            margin-top: 20px;
+        }
 
-.demo-helper-link span {
-    color: #633F34;
-    text-decoration: underline;
-    font-weight: 800;
-    cursor: pointer;
-}
+        .demo-helper-link span {
+            color: #633F34;
+            text-decoration: underline;
+            font-weight: 800;
+            cursor: pointer;
+        }
 
-.error-alert-label {
-    color: #b93737;
-    font-size: 13px;
-    font-weight: 700;
-    margin-top: 12px;
-    text-align: center;
-    display: none;
-}
+        .error-alert-label {
+            color: #b93737;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 12px;
+            text-align: center;
+            display: none;
+        }
 
-.login-footer-credits {
-    text-align: center;
-    font-size: 11px;
-    color: #8c6a5e;
-    margin-top: 25px;
-    font-weight: 500;
-}
+        .login-footer-credits {
+            text-align: center;
+            font-size: 11px;
+            color: #8c6a5e;
+            margin-top: 25px;
+            font-weight: 500;
+        }
 
-/* ==========================================================================
-   STRUKTUR PANEL WORKSPACE (DASHBOARD)
-   ========================================================================== */
-.workspace-wrapper {
-    display: flex;
-    min-height: 100vh;
-}
+        /* ==========================================================================
+           STRUKTUR PANEL WORKSPACE (SIDEBAR & DASHBOARD COKLAT-PINK)
+           ========================================================================== */
+        .workspace-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
 
-.sidebar {
-    width: 260px;
-    background: #633F34;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0; bottom: 0; left: 0;
-    z-index: 999;
-    transition: all 0.3s ease;
-    border-right: 4px solid #633F34;
-}
+        .sidebar {
+            width: 260px;
+            background: #633F34;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            z-index: 999;
+            transition: all 0.3s ease;
+            border-right: 4px solid #633F34;
+        }
 
-.sidebar-brand {
-    padding: 24px;
-    font-size: 20px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-}
+        .sidebar-brand {
+            padding: 24px;
+            font-size: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+        }
 
-.close-menu-btn {
-    display: none;
-    background: none; border: none; color: #fff;
-    font-size: 20px; cursor: pointer;
-}
+        .close-menu-btn {
+            display: none;
+            background: none; border: none; color: #fff;
+            font-size: 20px; cursor: pointer;
+        }
 
-.sidebar-menu {
-    list-style: none;
-    padding: 20px 12px;
-    flex-grow: 1;
-}
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 12px;
+            flex-grow: 1;
+        }
 
-.sidebar-menu li {
-    padding: 14px 16px;
-    margin-bottom: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    font-weight: 600;
-    font-size: 14px;
-    color: #f7cad0;
-    transition: all 0.2s;
-}
+        .sidebar-menu li {
+            padding: 14px 16px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #f7cad0;
+            transition: all 0.2s;
+        }
 
-.sidebar-menu li i {
-    font-size: 18px; width: 24px; text-align: center;
-}
+        .sidebar-menu li i {
+            font-size: 18px; width: 24px; text-align: center;
+        }
 
-.sidebar-menu li:hover, .sidebar-menu li.active {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-}
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+        }
 
-.logout-item { margin-top: auto; color: #ffb3c1 !important; }
+        .logout-item { margin-top: auto; color: #ffb3c1 !important; }
 
-.content-body {
-    flex-grow: 1;
-    margin-left: 260px;
-    padding: 30px;
-    min-width: 0;
-}
+        .content-body {
+            flex-grow: 1;
+            margin-left: 260px;
+            padding: 30px;
+            min-width: 0;
+        }
 
-.content-header {
-    background: #ffffff;
-    padding: 16px 24px;
-    border: 3px solid #633F34;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 30px;
-}
+        .content-header {
+            background: #ffffff;
+            padding: 16px 24px;
+            border: 3px solid #633F34;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
 
-.header-left { display: flex; align-items: center; gap: 15px; }
-.hamburger-btn { display: none; background: none; border: none; color: #633F34; font-size: 22px; cursor: pointer; }
-.header-title { font-size: 18px; font-weight: 800; color: #633F34; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .hamburger-btn { display: none; background: none; border: none; color: #633F34; font-size: 22px; cursor: pointer; }
+        .header-title { font-size: 18px; font-weight: 800; color: #633F34; }
 
-.user-profile-badge { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: #633F34; }
-.avatar-circle { width: 36px; height: 36px; background: #633F34; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; border: 2px solid #633F34; }
+        .user-profile-badge { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: #633F34; }
+        .avatar-circle { width: 36px; height: 36px; background: #633F34; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; border: 2px solid #633F34; }
 
-/* ==========================================================================
-   CARD TAMPILAN KONTEN & ELEMEN TABEL KOTAK
-   ========================================================================== */
-.card-box {
-    background: #ffffff;
-    border: 3px solid #633F34;
-    padding: 30px;
-    margin-bottom: 25px;
-}
+        .card-box {
+            background: #ffffff;
+            border: 3px solid #633F34;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
 
-.card-header, .card-header-flex { margin-bottom: 20px; }
-.card-header-flex { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-.card-box h3 { font-size: 18px; font-weight: 800; color: #633F34; display: flex; align-items: center; gap: 10px; }
+        .card-header, .card-header-flex { margin-bottom: 20px; }
+        .card-header-flex { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        .card-box h3 { font-size: 18px; font-weight: 800; color: #633F34; display: flex; align-items: center; gap: 10px; }
 
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-.stat-card { background: #ffffff; border: 2px solid #633F34; padding: 20px; display: flex; align-items: center; gap: 20px; }
-.stat-card i { font-size: 32px; }
-.text-pink-accent { color: #e56b6f; }
-.text-brown-base { color: #633F34; }
-.stat-card h4 { font-size: 22px; font-weight: 800; color: #633F34; }
-.stat-card p { font-size: 12px; color: #8c6a5e; font-weight: 600; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .stat-card { background: #ffffff; border: 2px solid #633F34; padding: 20px; display: flex; align-items: center; gap: 20px; }
+        .stat-card i { font-size: 32px; }
+        .text-pink-accent { color: #e56b6f; }
+        .text-brown-base { color: #633F34; }
+        .stat-card h4 { font-size: 22px; font-weight: 800; color: #633F34; }
+        .stat-card p { font-size: 12px; color: #8c6a5e; font-weight: 600; }
 
-.form-group { margin-bottom: 20px; text-align: left; }
-.form-group label { font-size: 13px; font-weight: 700; color: #633F34; margin-bottom: 8px; display: block; }
-.form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid #633F34; background: #ffffff; font-family: inherit; color: #633F34; font-weight: 600; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { font-size: 13px; font-weight: 700; color: #633F34; margin-bottom: 8px; display: block; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid #633F34; background: #ffffff; font-family: inherit; color: #633F34; font-weight: 600; text-align: center; }
 
-.profile-readonly-input { background: #fcedea !important; color: #633F34 !important; }
-.profile-select-input { cursor: pointer; }
+        .profile-readonly-input { background: #fcedea !important; color: #633F34 !important; }
+        .profile-select-input { cursor: pointer; text-align-last: center; }
 
-.table-responsive { width: 100%; overflow-x: auto; border: 2px solid #633F34; }
-.modern-table { width: 100%; border-collapse: collapse; text-align: left; background: #ffffff; font-size: 14px; }
-.modern-table th { background: #fcedea; padding: 16px; font-weight: 700; color: #633F34; border-bottom: 2px solid #633F34; }
-.modern-table td { padding: 16px; border-bottom: 1px solid #633F34; color: #633F34; font-weight: 500; }
+        .table-responsive { width: 100%; overflow-x: auto; border: 2px solid #633F34; }
+        .modern-table { width: 100%; border-collapse: collapse; text-align: left; background: #ffffff; font-size: 14px; }
+        .modern-table th { background: #fcedea; padding: 16px; font-weight: 700; color: #633F34; border-bottom: 2px solid #633F34; text-align: center; }
+        .modern-table td { padding: 16px; border-bottom: 1px solid #633F34; color: #633F34; font-weight: 500; text-align: center; }
 
-.btn-action { background: #633F34; color: #ffffff; border: none; padding: 12px 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
-.btn-copy { background: #ffffff; border: 2px solid #633F34; color: #633F34; padding: 8px 14px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; }
-.btn-copy:hover { background: #633F34; color: #ffffff; }
+        .btn-action { background: #633F34; color: #ffffff; border: none; padding: 12px 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
+        .btn-copy { background: #ffffff; border: 2px solid #633F34; color: #633F34; padding: 8px 14px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+        .btn-copy:hover { background: #633F34; color: #ffffff; }
 
-.sidebar-overlay {
-    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(99, 63, 52, 0.4); z-index: 998; backdrop-filter: blur(4px);
-}
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(99, 63, 52, 0.4); z-index: 998; backdrop-filter: blur(4px);
+        }
 
-.badge-status { background: #e8f5e9; color: #2a9d8f; font-weight: 700; padding: 4px 10px; border: 1px solid #2a9d8f; font-size: 11px; }
+        .badge-status { background: #e8f5e9; color: #2a9d8f; font-weight: 700; padding: 4px 10px; border: 1px solid #2a9d8f; font-size: 11px; }
+        .alert-success-box { color:#2a9d8f; padding:12px; background:#e8f5e9; border: 2px solid #2a9d8f; margin-top:10px; font-size:13px; text-align: center; }
+        .alert-success-box code { font-size:14px; color:#b93737; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #633F34; }
 
-.alert-success-box { color:#2a9d8f; padding:12px; background:#e8f5e9; border: 2px solid #2a9d8f; margin-top:10px; font-size:13px; }
-.alert-success-box code { font-size:14px; color:#b93737; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #633F34; }
-
-/* ==========================================================================
-   RESPONSIF TAMPILAN SELULER (HP / MOBILE OPTIMIZED)
-   ========================================================================== */
-@media (max-width: 768px) {
-    .login-card-box {
-        padding: 30px 20px;
-        box-shadow: 6px 6px 0px #633F34; /* Perkecil bayangan di HP */
-    }
-    .sidebar { left: -260px; }
-    .sidebar.open { left: 0; }
-    .sidebar-overlay.open { display: block; }
-    .close-menu-btn, .hamburger-btn { display: block; }
-    .content-body { margin-left: 0; padding: 15px; }
-    .content-header { padding: 12px 16px; margin-bottom: 20px; }
-    .card-box { padding: 20px 15px; }
-}
+        /* ==========================================================================
+           RESPONSIF TAMPILAN SELULER (HP / MOBILE OPTIMIZED)
+           ========================================================================== */
+        @media (max-width: 768px) {
+            .login-card-box {
+                padding: 30px 20px;
+                box-shadow: 6px 6px 0px #633F34;
+            }
+            .sidebar { left: -260px; }
+            .sidebar.open { left: 0; }
+            .sidebar-overlay.open { display: block; }
+            .close-menu-btn, .hamburger-btn { display: block; }
+            .content-body { margin-left: 0; padding: 15px; }
+            .content-header { padding: 12px 16px; margin-bottom: 20px; }
+            .card-box { padding: 20px 15px; }
+        }
