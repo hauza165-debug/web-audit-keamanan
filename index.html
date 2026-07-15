@@ -217,29 +217,18 @@
 
                 <div id="tab-profile" class="card-box" style="display: none;">
                     <div class="card-header"><h3><i class="fa-solid fa-id-card"></i> Informasi Akun Pengguna</h3></div>
-                    
                     <div class="form-group">
                         <label>Nama Pengguna / Username:</label>
-                        <input type="text" id="profileUsername" class="disabled-style-input" readonly>
+                        <input type="text" id="profileUsername" style="background: #f4eae6; color: #633F34; font-weight:700;" readonly>
                     </div>
-                    
                     <div class="form-group">
                         <label>Program Studi:</label>
-                        <select id="profileProdi" style="width: 100%; padding: 12px; border: 2px solid #f2e5e1; border-radius: 12px; outline: none; background: #faf8f7; color: #4a2e27; font-weight: 600;">
+                        <select id="profileProdi" style="width: 100%; padding: 12px; border: 2px solid #f2e5e1; border-radius: 12px; background: #faf8f7; color:#4a2e27; font-weight:600;">
                             <option value="Sistem Informasi">Sistem Informasi</option>
                             <option value="Teknik Informatika">Teknik Informatika</option>
                             <option value="Keamanan Siber (Cybersecurity)">Keamanan Siber (Cybersecurity)</option>
                             <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
-                            <option value="Teknologi Informasi">Teknologi Informasi</option>
-                            <option value="Sains Data">Sains Data</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Status Layanan Infrastruktur:</label>
-                        <p style="padding: 10px; background: #faf8f7; border-radius: 8px; font-size: 13px; border: 1px solid #f2e5e1;">
-                            <i class="fa-solid fa-cloud" style="color:#633F34;"></i> Supabase Cloud Connected (Free Tier Storage)
-                        </p>
                     </div>
                 </div>
 
@@ -262,13 +251,12 @@
             overlay.classList.toggle('open');
         }
 
-        // VERIFIKASI AKSES DAN PENERUSAN DATA USERNAME
         function verifySystemToken() {
             const usernameInput = document.getElementById('loginUsername').value.trim();
             const tokenInput = document.getElementById('accessToken').value.trim();
             
             if (!usernameInput) {
-                alert("Harap masukkan Username Anda terlebih dahulu!");
+                alert("Harap masukkan Username Anda!");
                 return;
             }
 
@@ -276,7 +264,6 @@
                 document.getElementById('token-page').style.display = 'none';
                 document.getElementById('main-dashboard').style.display = 'flex';
                 
-                // Set data dinamis di Dashboard & Profile
                 document.getElementById('dashboardDisplayUsername').innerText = usernameInput;
                 document.getElementById('profileUsername').value = usernameInput;
                 document.getElementById('avatarLetter').innerText = usernameInput.charAt(0).toUpperCase();
@@ -288,6 +275,29 @@
             }
         }
 
+        // FUNGSI SINKRONISASI KONVERSI BUFFER KE WORDARRAY AES
+        function arrayBufferToLinks(arrayBuffer) {
+            const i8a = new Uint8Array(arrayBuffer);
+            const a = [];
+            for (let i = 0; i < i8a.length; i += 4) {
+                a.push((i8a[i] << 24) | (i8a[i + 1] << 16) | (i8a[i + 2] << 8) | i8a[i + 3]);
+            }
+            return CryptoJS.lib.WordArray.create(a, i8a.length);
+        }
+
+        function wordArrayToByteArray(wordArray, length) {
+            const words = wordArray.words;
+            const sigBytes = wordArray.sigBytes;
+            const u8 = new Uint8Array(sigBytes);
+            let c = 0;
+            for (let i = 0; i < sigBytes; i++) {
+                const byte = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                u8[c++] = byte;
+            }
+            return u8;
+        }
+
+        // FUNGSI UNGGAN DENGAN METODE KRIPTOGRAFI STABIL MURNI
         function encryptAndUpload() {
             const fileInput = document.getElementById('fileInput');
             const secretKey = document.getElementById('secretKey').value;
@@ -302,16 +312,19 @@
             const file = fileInput.files[0];
             uploadBtn.disabled = true;
             statusDiv.style.display = "block";
-            statusDiv.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Proses enkripsi AES-256 berkas...";
+            statusDiv.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Memproses enkripsi biner AES-256 berkas...";
 
             const reader = new FileReader();
             reader.onload = async function(e) {
-                const fileData = e.target.result;
-                const encryptedData = CryptoJS.AES.encrypt(fileData, secretKey).toString();
+                const arrayBuffer = e.target.result;
+                const wordArray = arrayBufferToLinks(arrayBuffer);
+                
+                // Proses enkripsi data biner berkas
+                const encryptedData = CryptoJS.AES.encrypt(wordArray, secretKey).toString();
                 const blob = new Blob([encryptedData], {type: "text/plain"});
                 
                 const encryptedFileName = Date.now() + "_" + file.name + ".enc";
-                statusDiv.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Mengirim paket ke Supabase Storage...";
+                statusDiv.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Mengirim paket biner ke Supabase Storage...";
 
                 const { data: storageData, error: storageError } = await sbClient.storage
                     .from('web_keamanan')
@@ -334,17 +347,17 @@
                     alert("Database Metadata Error: " + dbError.message);
                 } else {
                     statusDiv.innerHTML = `<div style='color:#2a9d8f; padding:12px; background:#e8f5e9; border-radius:8px; border: 1px solid #c8e6c9; margin-top:10px;'>
-                        <strong><i class='fa-solid fa-circle-check'></i> Sinkronisasi Selesai!</strong><br>
-                        Token Akses Berkas: <code style='font-size:15px; color:#c9184a; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #ccc;'>${generatedToken}</code><br>
-                        <small>Gunakan token database di atas untuk proses unduh di tab Token Access.</small>
+                        <strong><i class='fa-solid fa-circle-check'></i> Proteksi Berhasil!</strong><br>
+                        Token Berkas Baru Anda: <code style='font-size:15px; color:#c9184a; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #ccc;'>${generatedToken}</code><br>
+                        <small>Silakan gunakan token di atas pada menu My Files untuk mengunduh.</small>
                     </div>`;
                     fileInput.value = '';
                     document.getElementById('secretKey').value = '';
                     fetchFileList();
                 }
                 uploadBtn.disabled = false;
-            }
-            reader.readAsDataURL(file);
+            };
+            reader.readAsArrayBuffer(file);
         }
 
         async function fetchFileList() {
@@ -405,6 +418,7 @@
             }
         }
 
+        // FUNGSI UNDUH DAN DEKRIPSI BINARY DENGAN VALIDASI SANGAT KETAT
         function downloadAndDecrypt() {
             const inputToken = document.getElementById('inputAccessToken').value.trim();
             const secretKey = document.getElementById('decryptSecretKey').value;
@@ -429,17 +443,19 @@
                 .then(res => res.text())
                 .then(ciphertext => {
                     try {
-                        const decryptedBytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
-                        const originalData = decryptedBytes.toString(CryptoJS.enc.Utf8);
+                        // Proses Balik Dekripsi Biner AES
+                        const decrypted = CryptoJS.AES.decrypt(ciphertext, secretKey);
+                        if (decrypted.sigBytes <= 0) throw new Error();
 
-                        if (!originalData || originalData.trim() === "") throw new Error();
+                        const typedArray = wordArrayToByteArray(decrypted);
+                        const blob = new Blob([typedArray], { type: "application/octet-stream" });
 
                         const link = document.createElement("a");
-                        link.href = originalData;
+                        link.href = URL.createObjectURL(blob);
                         link.download = currentSelectedFile.file_name;
                         link.click();
                         
-                        alert("Validasi Berhasil & File Asli Siap Diunduh!");
+                        alert("Validasi Berhasil & File Asli Sukses Didekripsi!");
                         document.getElementById('inputAccessToken').value = "";
                         document.getElementById('decryptSecretKey').value = "";
                     } catch (e) {
