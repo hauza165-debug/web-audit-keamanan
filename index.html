@@ -4,407 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Cloud Storage (Triple Auth & Supabase)</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        /* ==========================================================================
-           RESET & CORE BRAND STYLING (PINK-COKLAT SOFT POLKADOT)
-           ========================================================================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #fceade;
-            background-image: radial-gradient(#f7cad0 15%, transparent 16%);
-            background-size: 24px 24px;
-            color: #633F34;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ==========================================================================
-           DESAIN GATEWAY ACCESS (DUA KOLOM IKONIK - RESPONSIVE MOBILE)
-           ========================================================================== */
-        .login-wrapper {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .login-card {
-            background: #ffffff;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(99, 63, 52, 0.15);
-            width: 100%;
-            max-width: 940px;
-            min-height: 580px;
-            display: flex;
-            overflow: hidden;
-            border: 4px solid #633F34;
-        }
-
-        /* Kolom Kiri: Coklat Padat dengan Lingkaran Pink */
-        .login-left {
-            flex: 1;
-            background: #633F34;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-        }
-
-        .circle-dashed-decor {
-            width: 190px;
-            height: 190px;
-            border: 3px dashed #f7cad0;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .circle-dashed-decor span {
-            color: #faf0ed;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .circle-dashed-decor h1 {
-            color: #ffffff;
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-container-pill {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1.5px solid #f7cad0;
-            padding: 8px 20px;
-            border-radius: 50px;
-            color: #f7cad0;
-            font-weight: 700;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Kolom Kanan: Putih Bersih Simetris di Tengah */
-        .login-right {
-            flex: 1.1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: #ffffff;
-        }
-
-        .login-right h2 {
-            font-size: 24px;
-            font-weight: 800;
-            color: #633F34;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-
-        .login-right p {
-            font-size: 13px;
-            color: #8c6a5e;
-            line-height: 1.5;
-            margin-bottom: 25px;
-            max-width: 350px;
-        }
-
-        .input-group-container {
-            width: 100%;
-            max-width: 360px;
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .input-group-container label {
-            font-size: 11px;
-            font-weight: 700;
-            color: #633F34;
-            margin-bottom: 6px;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .input-relative-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-relative-wrapper i {
-            position: absolute;
-            left: 16px;
-            color: #b58371;
-            font-size: 15px;
-        }
-
-        .input-relative-wrapper input {
-            width: 100%;
-            padding: 12px 16px 12px 48px;
-            border: 2px solid #f2e5e1;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 14px;
-            color: #633F34;
-            background: #faf8f7;
-            transition: all 0.3s ease;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .input-relative-wrapper input:focus {
-            outline: none;
-            border-color: #f7cad0;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(247, 202, 208, 0.4);
-        }
-
-        .btn-gate-submit {
-            width: 100%;
-            max-width: 360px;
-            padding: 14px;
-            background: #633F34;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(99, 63, 52, 0.2);
-            transition: all 0.2s ease;
-            margin-top: 5px;
-        }
-
-        .btn-gate-submit:hover {
-            background: #4a2e27;
-            transform: translateY(-1px);
-        }
-
-        .demo-helper-box {
-            font-size: 12.5px;
-            font-weight: 600;
-            color: #8c6a5e;
-            margin-top: 18px;
-        }
-
-        .demo-helper-box span {
-            color: #e56b6f;
-            text-decoration: none;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .demo-helper-box span:hover {
-            text-decoration: underline;
-        }
-
-        .error-alert-text {
-            color: #e56b6f;
-            font-size: 12px;
-            font-weight: 700;
-            margin-top: 10px;
-            display: none;
-        }
-
-        /* ==========================================================================
-           WORKSPACE UTAMA & DASHBOARD (SIDEBAR PINK-COKLAT ELEGAN)
-           ========================================================================== */
-        .workspace-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 260px;
-            background: #633F34;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0; bottom: 0; left: 0;
-            z-index: 999;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-right: 4px solid #4a2e27;
-        }
-
-        .sidebar-brand {
-            padding: 24px;
-            font-size: 20px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .close-menu-btn {
-            display: none;
-            background: none; border: none; color: #fff;
-            font-size: 20px; cursor: pointer;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 20px 12px;
-            flex-grow: 1;
-        }
-
-        .sidebar-menu li {
-            padding: 14px 16px;
-            border-radius: 12px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #dfc7c0;
-            transition: all 0.2s;
-        }
-
-        .sidebar-menu li i {
-            font-size: 18px; width: 24px; text-align: center;
-        }
-
-        .sidebar-menu li:hover, .sidebar-menu li.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-        }
-
-        .logout-item { margin-top: auto; color: #f7cad0 !important; }
-
-        .content-body {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 30px;
-            min-width: 0;
-        }
-
-        .content-header {
-            background: #ffffff;
-            padding: 16px 24px;
-            border-radius: 18px;
-            border: 3px solid #633F34;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .hamburger-btn { display: none; background: none; border: none; color: #633F34; font-size: 22px; cursor: pointer; }
-        .header-title { font-size: 18px; font-weight: 800; color: #633F34; }
-        
-        .user-profile-badge { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; }
-        .avatar-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; border: 2px solid #633F34; }
-
-        .card-box {
-            background: #ffffff;
-            border-radius: 20px;
-            border: 3px solid #633F34;
-            padding: 30px;
-            margin-bottom: 25px;
-        }
-
-        .card-header, .card-header-flex { margin-bottom: 20px; }
-        .card-header-flex { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-        .card-box h3 { font-size: 18px; font-weight: 800; color: #633F34; display: flex; align-items: center; gap: 10px; }
-        .card-desc { font-size: 13px; color: #8c6a5e; margin-bottom: 20px; line-height: 1.5; }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-        .stat-card { background: #faf8f7; border: 2px solid #f2e5e1; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 20px; }
-        .stat-card i { font-size: 32px; }
-        .text-rose { color: #e56b6f; }
-        .text-brown { color: #633F34; }
-        .stat-card h4 { font-size: 22px; font-weight: 800; color: #633F34; }
-        .stat-card p { font-size: 12px; color: #8c6a5e; font-weight: 600; }
-
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { font-size: 13px; font-weight: 700; color: #633F34; margin-bottom: 8px; display: block; }
-        .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid #f2e5e1; border-radius: 12px; background: #faf8f7; font-family: inherit; color: #633F34; }
-        
-        .table-responsive { width: 100%; overflow-x: auto; border-radius: 12px; border: 2px solid #f2e5e1; }
-        .modern-table { width: 100%; border-collapse: collapse; text-align: left; background: #ffffff; font-size: 14px; }
-        .modern-table th { background: #faf8f7; padding: 16px; font-weight: 700; color: #633F34; border-bottom: 2px solid #f2e5e1; }
-        .modern-table td { padding: 16px; border-bottom: 1px solid #f2e5e1; color: #633F34; }
-        
-        .btn-action { background: #633F34; color: #ffffff; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; }
-        .btn-copy { background: #ffffff; border: 2px solid #633F34; color: #633F34; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; }
-        .btn-copy:hover { background: #633F34; color: #ffffff; }
-
-        .sidebar-overlay {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(99, 63, 52, 0.4); z-index: 998; backdrop-filter: blur(4px);
-        }
-
-        .badge-status { background: #e8f5e9; color: #2a9d8f; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px; }
-
-        /* ==========================================================================
-           RESPONSIF MOBILE SANGAT RAPI UNTUK HP
-           ========================================================================== */
-        @media (max-width: 768px) {
-            .login-card {
-                flex-direction: column;
-                border-radius: 24px;
-                max-width: 420px;
-                min-height: auto;
-            }
-            .login-left {
-                padding: 35px 20px;
-            }
-            .circle-dashed-decor {
-                width: 150px;
-                height: 150px;
-                margin-bottom: 20px;
-            }
-            .circle-dashed-decor h1 {
-                font-size: 22px;
-            }
-            .login-right {
-                padding: 35px 20px;
-            }
-            .sidebar { left: -260px; }
-            .sidebar.open { left: 0; }
-            .sidebar-overlay.open { display: block; }
-            .close-menu-btn, .hamburger-btn { display: block; }
-            .content-body { margin-left: 0; padding: 15px; }
-            .content-header { padding: 12px 16px; margin-bottom: 20px; }
-            .card-box { padding: 20px 15px; }
-        }
-    </style>
 </head>
 <body>
 
@@ -603,7 +208,6 @@
         let loggedInUser = "";
         let currentSelectedFile = null;
 
-        // Otomatis Mengisi Seluruh Data Demo Biar User/Dosen Gampang Nyoba
         function fillDemoAccount() {
             document.getElementById('authUsername').value = "fatma_ulfiana";
             document.getElementById('authPassword').value = "rahasia123";
@@ -615,7 +219,6 @@
             document.getElementById('sidebar-overlay').classList.toggle('open');
         }
 
-        // VALIDASI KEAMANAN TRIPLE LAYER (USERNAME + PASSWORD + TOKEN GLOBAL)
         function validateTripleAuth() {
             const usernameInput = document.getElementById('authUsername').value.trim();
             const passwordInput = document.getElementById('authPassword').value.trim();
@@ -628,14 +231,12 @@
                 return;
             }
 
-            // Validasi Kredensial Lapisan Akun + Token Gerbang
             if (passwordInput !== "rahasia123" || tokenInput !== "UAS-RAHASIA-2026") {
                 errorElement.innerText = "Password Akun atau Token Gerbang Salah! Akses Ditolak.";
                 errorElement.style.display = "block";
                 return;
             }
 
-            // Sukses Melalui Tiga Lapisan Proteksi
             loggedInUser = usernameInput;
             errorElement.style.display = "none";
             
@@ -650,7 +251,6 @@
             switchTab('dashboard');
         }
 
-        // PARSER KRIPTOGRAFI AES
         function arrayBufferToLinks(arrayBuffer) {
             const i8a = new Uint8Array(arrayBuffer);
             const a = [];
@@ -672,7 +272,6 @@
             return u8;
         }
 
-        // UPLOAD & FILTER DATA BERDASARKAN USERNAME AKTIF
         function encryptAndUpload() {
             const fileInput = document.getElementById('fileInput');
             const secretKey = document.getElementById('secretKey').value;
@@ -712,7 +311,6 @@
                 statusDiv.innerHTML = "<i class='fa-solid fa-database'></i> Mencatat hak milik akun ke database...";
                 const generatedToken = "TOK-" + Math.floor(100000 + Math.random() * 900000);
 
-                // Mengunci data berdasarkan username pengeksekusi
                 const { error: dbError } = await sbClient
                     .from('file_metadata')
                     .insert([{ 
@@ -738,7 +336,6 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // AMBIL DATA KHUSUS USERNAME YANG TERLOG IN
         async function fetchFileList() {
             const fileTable = document.getElementById('myFilesTableBody');
             const logBody = document.getElementById('logTableBody');
