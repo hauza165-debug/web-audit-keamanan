@@ -1,355 +1,35 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Cloud Storage (Triple Auth & Supabase)</title>
+    <title>StarSafe Cloud - Cyber Triple Gateway 2030</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        /* ==========================================================================
-           RESET & DASAR TEMA WARNA (KONTRAST TINGGI COKLAT & PINK)
-           ========================================================================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #fcedea; /* Latar Belakang Pink Lembut Murni */
-            color: #633F34; /* Font Coklat Tua Utama */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ==========================================================================
-           TAMPILAN GATEWAY LOGIN PETAK TEGAS COKLAT & PINK (RESPONSIVE HP)
-           ========================================================================== */
-        .login-wrapper {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .login-card-box {
-            background: #ffffff;
-            width: 100%;
-            max-width: 480px;
-            padding: 40px 30px;
-            border: 4px solid #633F34; /* Border Petak Kotak Tegas */
-            box-shadow: 12px 12px 0px #633F34; /* Efek Neo-brutalism Kotak */
-            display: flex;
-            flex-direction: column;
-        }
-
-        .login-header-zone {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .login-icon-brand {
-            font-size: 42px;
-            color: #633F34;
-            margin-bottom: 12px;
-        }
-
-        .login-header-zone h2 {
-            font-size: 22px;
-            font-weight: 800;
-            color: #633F34;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .login-header-zone p {
-            font-size: 13px;
-            color: #8c6a5e;
-            line-height: 1.6;
-        }
-
-        .login-form-zone {
-            width: 100%;
-        }
-
-        .input-field-block {
-            margin-bottom: 18px;
-        }
-
-        .input-field-block label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #633F34;
-            display: block;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        .input-icon-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-icon-wrapper i {
-            position: absolute;
-            left: 16px;
-            color: #633F34;
-            font-size: 16px;
-        }
-
-        .input-icon-wrapper input {
-            width: 100%;
-            padding: 14px 16px 14px 46px;
-            border: 2px solid #633F34;
-            border-radius: 0px; /* Bentuk Petak Sempurna */
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            color: #633F34;
-            background: #ffffff;
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-
-        .input-icon-wrapper input:focus {
-            outline: none;
-            background: #fcedea; /* Aksen Fokus Pink Tipis */
-            box-shadow: inset 0 0 0 1px #633F34;
-        }
-
-        .btn-login-trigger {
-            width: 100%;
-            padding: 15px;
-            background: #633F34;
-            color: #ffffff;
-            border: 2px solid #633F34;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.2s;
-        }
-
-        .btn-login-trigger:hover {
-            background: #ffffff;
-            color: #633F34;
-        }
-
-        .demo-helper-link {
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: #8c6a5e;
-            margin-top: 20px;
-        }
-
-        .demo-helper-link span {
-            color: #633F34;
-            text-decoration: underline;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .error-alert-label {
-            color: #b93737;
-            font-size: 13px;
-            font-weight: 700;
-            margin-top: 12px;
-            text-align: center;
-            display: none;
-        }
-
-        .login-footer-credits {
-            text-align: center;
-            font-size: 11px;
-            color: #8c6a5e;
-            margin-top: 25px;
-            font-weight: 500;
-        }
-
-        /* ==========================================================================
-           STRUKTUR PANEL WORKSPACE (SIDEBAR & DASHBOARD COKLAT-PINK)
-           ========================================================================== */
-        .workspace-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 260px;
-            background: #633F34;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0; bottom: 0; left: 0;
-            z-index: 999;
-            transition: all 0.3s ease;
-            border-right: 4px solid #633F34;
-        }
-
-        .sidebar-brand {
-            padding: 24px;
-            font-size: 20px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .close-menu-btn {
-            display: none;
-            background: none; border: none; color: #fff;
-            font-size: 20px; cursor: pointer;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 20px 12px;
-            flex-grow: 1;
-        }
-
-        .sidebar-menu li {
-            padding: 14px 16px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #f7cad0;
-            transition: all 0.2s;
-        }
-
-        .sidebar-menu li i {
-            font-size: 18px; width: 24px; text-align: center;
-        }
-
-        .sidebar-menu li:hover, .sidebar-menu li.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-        }
-
-        .logout-item { margin-top: auto; color: #ffb3c1 !important; }
-
-        .content-body {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 30px;
-            min-width: 0;
-        }
-
-        .content-header {
-            background: #ffffff;
-            padding: 16px 24px;
-            border: 3px solid #633F34;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .hamburger-btn { display: none; background: none; border: none; color: #633F34; font-size: 22px; cursor: pointer; }
-        .header-title { font-size: 18px; font-weight: 800; color: #633F34; }
-
-        .user-profile-badge { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: #633F34; }
-        .avatar-circle { width: 36px; height: 36px; background: #633F34; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; border: 2px solid #633F34; }
-
-        .card-box {
-            background: #ffffff;
-            border: 3px solid #633F34;
-            padding: 30px;
-            margin-bottom: 25px;
-        }
-
-        .card-header, .card-header-flex { margin-bottom: 20px; }
-        .card-header-flex { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-        .card-box h3 { font-size: 18px; font-weight: 800; color: #633F34; display: flex; align-items: center; gap: 10px; }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-        .stat-card { background: #ffffff; border: 2px solid #633F34; padding: 20px; display: flex; align-items: center; gap: 20px; }
-        .stat-card i { font-size: 32px; }
-        .text-pink-accent { color: #e56b6f; }
-        .text-brown-base { color: #633F34; }
-        .stat-card h4 { font-size: 22px; font-weight: 800; color: #633F34; }
-        .stat-card p { font-size: 12px; color: #8c6a5e; font-weight: 600; }
-
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { font-size: 13px; font-weight: 700; color: #633F34; margin-bottom: 8px; display: block; }
-        .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid #633F34; background: #ffffff; font-family: inherit; color: #633F34; font-weight: 600; text-align: center; }
-
-        .profile-readonly-input { background: #fcedea !important; color: #633F34 !important; }
-        .profile-select-input { cursor: pointer; text-align-last: center; }
-
-        .table-responsive { width: 100%; overflow-x: auto; border: 2px solid #633F34; }
-        .modern-table { width: 100%; border-collapse: collapse; text-align: left; background: #ffffff; font-size: 14px; }
-        .modern-table th { background: #fcedea; padding: 16px; font-weight: 700; color: #633F34; border-bottom: 2px solid #633F34; text-align: center; }
-        .modern-table td { padding: 16px; border-bottom: 1px solid #633F34; color: #633F34; font-weight: 500; text-align: center; }
-
-        .btn-action { background: #633F34; color: #ffffff; border: none; padding: 12px 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
-        .btn-copy { background: #ffffff; border: 2px solid #633F34; color: #633F34; padding: 8px 14px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; }
-        .btn-copy:hover { background: #633F34; color: #ffffff; }
-
-        .sidebar-overlay {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(99, 63, 52, 0.4); z-index: 998; backdrop-filter: blur(4px);
-        }
-
-        .badge-status { background: #e8f5e9; color: #2a9d8f; font-weight: 700; padding: 4px 10px; border: 1px solid #2a9d8f; font-size: 11px; }
-        .alert-success-box { color:#2a9d8f; padding:12px; background:#e8f5e9; border: 2px solid #2a9d8f; margin-top:10px; font-size:13px; text-align: center; }
-        .alert-success-box code { font-size:14px; color:#b93737; font-weight:bold; background:#fff; padding:2px 6px; border:1px solid #633F34; }
-
-        /* ==========================================================================
-           RESPONSIF TAMPILAN SELULER (HP / MOBILE OPTIMIZED)
-           ========================================================================== */
-        @media (max-width: 768px) {
-            .login-card-box {
-                padding: 30px 20px;
-                box-shadow: 6px 6px 0px #633F34;
-            }
-            .sidebar { left: -260px; }
-            .sidebar.open { left: 0; }
-            .sidebar-overlay.open { display: block; }
-            .close-menu-btn, .hamburger-btn { display: block; }
-            .content-body { margin-left: 0; padding: 15px; }
-            .content-header { padding: 12px 16px; margin-bottom: 20px; }
-            .card-box { padding: 20px 15px; }
-        }
-    </style>
 </head>
 <body>
 
     <div id="auth-page" class="login-wrapper">
         <div class="login-card-box">
             <div class="login-header-zone">
-                <i class="fa-solid fa-cloud-shield login-icon-brand"></i>
-                <h2>TRIPLE ACCESS GATEWAY</h2>
+                <div class="brand-icon-wrapper">
+                    <i class="fa-solid fa-star neon-star-logo"></i>
+                    <span class="cyber-badge"><i class="fa-solid fa-shield-halved"></i> TRIPLE ACCESS</span>
+                </div>
+                <h2>CYBER GATEWAY</h2>
                 <p>Silakan isi Username & Password bebas untuk akun pertamamu, serta masukkan Token Gerbang Sistem yang valid.</p>
             </div>
             
             <div class="login-form-zone">
                 <div class="input-field-block">
-                    <label>Username / Nama Pengguna</label>
+                    <label>Username Pengguna</label>
                     <div class="input-icon-wrapper">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" id="authUsername" placeholder="Contoh: fatma_ulfiana" required>
+                        <input type="text" id="authUsername" placeholder="Contoh: hauzatul_aina" required>
                     </div>
                 </div>
 
@@ -362,21 +42,27 @@
                 </div>
 
                 <div class="input-field-block">
-                    <label>Token Akses Sistem</label>
+                    <label>Token Gerbang Akses</label>
                     <div class="input-icon-wrapper">
                         <i class="fa-solid fa-key"></i>
                         <input type="text" id="authSystemToken" placeholder="Masukkan token rahasia..." required>
                     </div>
                 </div>
                 
-                <button class="btn-login-trigger" onclick="validateTripleAuth()">MASUK KE NODE AMAN</button>
+                <button class="btn-login-trigger" onclick="validateTripleAuth()">VERIFIKASI GERBANG <i class="fa-solid fa-bolt"></i></button>
                 <p id="auth-error-msg" class="error-alert-label"></p>
                 
-                <div class="demo-helper-link">
-                    Gunakan Uji Coba Cepat? <span onclick="fillDemoAccount()">Isi Data Demo</span>
+                <div class="token-helper-container">
+                    <p class="token-helper-btn" onclick="toggleTokenModal()">
+                        <i class="fa-solid fa-circle-nodes"></i> Belum punya Token? Dapatkan di sini
+                    </p>
+                    <div id="token-display-box" class="token-display-box" style="display: none;">
+                        <span id="system-token-text">UAS-RAHASIA-2026</span>
+                        <button class="btn-copy-token" onclick="copyTokenToClipboard()"><i class="fa-solid fa-copy"></i> Salin</button>
+                    </div>
                 </div>
             </div>
-            <div class="login-footer-credits">© 2026 Project Case Study - Cloud Security</div>
+            <div class="login-footer-credits">© 2030 StarSafe Cyber Security • Core Interface</div>
         </div>
     </div>
 
@@ -385,121 +71,110 @@
 
         <aside id="sidebar-panel" class="sidebar">
             <div class="sidebar-brand">
-                <i class="fa-solid fa-cloud-shield"></i> CryptSafe
+                <span><i class="fa-solid fa-star"></i> StarSafe</span>
                 <button class="close-menu-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <ul class="sidebar-menu">
-                <li id="menu-dashboard" class="active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></li>
-                <li id="menu-myfiles" onclick="switchTab('myfiles')"><i class="fa-solid fa-folder-open"></i> <span>My Files</span></li>
+                <li id="menu-dashboard" class="active" onclick="switchTab('dashboard')"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></li>
+                <li id="menu-myfiles" onclick="switchTab('myfiles')"><i class="fa-solid fa-box-archive"></i> <span>My Files</span></li>
                 <li id="menu-upload" onclick="switchTab('upload')"><i class="fa-solid fa-cloud-arrow-up"></i> <span>Upload File</span></li>
-                <li id="menu-shared" onclick="switchTab('shared')"><i class="fa-solid fa-user-group"></i> <span>Shared With Me</span></li>
-                <li id="menu-token" onclick="switchTab('token')"><i class="fa-solid fa-key"></i> <span>Token Access</span></li>
-                <li id="menu-logs" onclick="switchTab('logs')"><i class="fa-solid fa-clock-rotate-left"></i> <span>Activity Log</span></li>
-                <li id="menu-profile" onclick="switchTab('profile')"><i class="fa-solid fa-user"></i> <span>Profile</span></li>
-                <li class="logout-item" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></li>
+                <li id="menu-token" onclick="switchTab('token')"><i class="fa-solid fa-fingerprint"></i> <span>Token Access</span></li>
+                <li id="menu-logs" onclick="switchTab('logs')"><i class="fa-solid fa-terminal"></i> <span>Activity Log</span></li>
+                <li id="menu-profile" onclick="switchTab('profile')"><i class="fa-solid fa-id-card-clip"></i> <span>Profile</span></li>
+                <li class="logout-item" onclick="logout()"><i class="fa-solid fa-power-off"></i> <span>Logout</span></li>
             </ul>
         </aside>
 
         <main class="content-body">
             <header class="content-header">
                 <div class="header-left">
-                    <button class="hamburger-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
-                    <div class="header-title">Secure Space Control</div>
+                    <button class="hamburger-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars-staggered"></i></button>
+                    <div class="header-title">SYSTEM SECURE CONTROL</div>
                 </div>
                 <div class="user-profile-badge">
-                    <span>Halo, <strong id="dashboardDisplayUsername">-</strong>!</span>
+                    <span>Halo, <strong id="dashboardDisplayUsername">-</strong>! ⭐</span>
                     <div id="avatarLetter" class="avatar-circle">F</div>
                 </div>
             </header>
 
             <div class="container-fluid">
                 <div id="tab-dashboard" class="card-box">
-                    <div class="card-header"><h3><i class="fa-solid fa-circle-user"></i> Selamat Datang Kembali</h3></div>
+                    <div class="card-header"><h3><i class="fa-solid fa-circle-nodes"></i> STATUS ENKLAVE DATA</h3></div>
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <i class="fa-solid fa-file-shield text-pink-accent"></i>
-                            <div><h4 id="stat-total-files">0</h4><p>Berkas Pribadi Anda</p></div>
+                            <i class="fa-solid fa-vault text-pink-accent"></i>
+                            <div><h4 id="stat-total-files">0</h4><p>Berkas Terkunci</p></div>
                         </div>
                         <div class="stat-card">
-                            <i class="fa-solid fa-user-lock text-brown-base"></i>
-                            <div><h4 style="font-size: 14px; word-break: break-all;" id="user-session-node">Terisolasi</h4><p>Status Enklave Data</p></div>
+                            <i class="fa-solid fa-network-wired text-glow"></i>
+                            <div><h4 style="font-size: 13px; word-break: break-all;" id="user-session-node">Terisolasi</h4><p>Jalur Enklave Pengguna</p></div>
                         </div>
                     </div>
                 </div>
 
                 <div id="tab-myfiles" class="card-box" style="display: none;">
                     <div class="card-header-flex">
-                        <h3>My Files (Milik Anda)</h3>
+                        <h3>My Files (Isolasi Terkunci)</h3>
                         <button class="btn-action" onclick="switchTab('upload')"><i class="fa-solid fa-plus"></i> Upload Baru</button>
                     </div>
                     <div class="table-responsive">
                         <table class="modern-table">
                             <thead>
-                                <tr><th>Nama File</th><th>Status Proteksi</th><th>Aksi Dekripsi</th></tr>
+                                <tr><th>Nama File</th><th>Tingkat Proteksi</th><th>Prosedur Operasi</th></tr>
                             </thead>
                             <tbody id="myFilesTableBody">
-                                <tr><td colspan="3" style="text-align:center; color:#8c6a5e;">Memuat berkas eksklusif Anda...</td></tr>
+                                <tr><td colspan="3" style="text-align:center; color:#ffb3c1;">Memuat berkas eksklusif Anda...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
                 <div id="tab-upload" class="card-box" style="display: none;">
-                    <div class="card-header"><h3><i class="fa-solid fa-file-shield"></i> Proteksi & Upload ke Node Saya</h3></div>
+                    <div class="card-header"><h3><i class="fa-solid fa-shield-halved"></i> Proteksi & Simpan ke Awan</h3></div>
                     <div class="form-group">
-                        <label><i class="fa-solid fa-file-arrow-up"></i> 1. Pilih Berkas</label>
+                        <label>1. Pilih Berkas Sistem</label>
                         <input type="file" id="fileInput">
                     </div>
                     <div class="form-group">
-                        <label><i class="fa-solid fa-lock"></i> 2. Masukkan Kunci Kriptografi AES</label>
-                        <input type="password" id="secretKey" placeholder="Password acak kunci berkas...">
+                        <label>2. Masukkan Kunci Enkripsi AES-256</label>
+                        <input type="password" id="secretKey" placeholder="Tentukan password kunci berkas...">
                     </div>
-                    <button class="btn-action" id="uploadBtn" onclick="encryptAndUpload()"><i class="fa-solid fa-upload"></i> Enkripsi & Simpan Kunci</button>
+                    <button class="btn-action" id="uploadBtn" onclick="encryptAndUpload()"><i class="fa-solid fa-lock"></i> Kunci & Kirim Berkas</button>
                     <div id="uploadStatus" class="status-box"></div>
                 </div>
 
-                <div id="tab-shared" class="card-box" style="display: none;">
-                    <div class="card-header"><h3>Shared With Me</h3></div>
-                    <div class="table-responsive">
-                        <table class="modern-table">
-                            <thead><tr><th>Nama File</th><th>Pengirim</th><th>Aksi</th></tr></thead>
-                            <tbody><tr><td>Modul_Kripto.pdf</td><td>admin@secure.net</td><td><button class="btn-copy" style="padding:4px 8px;"><i class="fa-solid fa-download"></i></button></td></tr></tbody>
-                        </table>
-                    </div>
-                </div>
-
                 <div id="tab-token" class="card-box" style="display: none;">
-                    <div class="card-header"><h3>Validasi Token & Akses Dekripsi</h3></div>
+                    <div class="card-header"><h3>Dekripsi Kunci Transaksi</h3></div>
                     <div id="decryption-zone">
-                        <p style="margin-bottom: 15px; text-align: center;">Target Berkas: <strong id="selectedFileName" style="color:#e56b6f;">Pilih Berkas di Menu My Files</strong></p>
+                        <p style="margin-bottom: 15px; text-align: center;">Target Berkas: <strong id="selectedFileName" style="color:#ffb3c1;">Pilih Berkas di Menu My Files</strong></p>
                         <div class="form-group">
-                            <label>Token Akses Unik:</label>
+                            <label>Token Akses Transaksi:</label>
                             <input type="text" id="inputAccessToken" placeholder="TOK-XXXXXX">
                         </div>
                         <div class="form-group">
-                            <label>Password Kunci AES Berkas:</label>
-                            <input type="password" id="decryptSecretKey" placeholder="Password pembuat kunci berkas...">
+                            <label>Password Pembuat Kunci AES:</label>
+                            <input type="password" id="decryptSecretKey" placeholder="Password dekripsi...">
                         </div>
-                        <button class="btn-action" onclick="downloadAndDecrypt()"><i class="fa-solid fa-download"></i> Cocokkan Token & Unduh Asli</button>
+                        <button class="btn-action" onclick="downloadAndDecrypt()"><i class="fa-solid fa-key"></i> Eksekusi Dekripsi & Unduh</button>
                     </div>
                 </div>
 
                 <div id="tab-logs" class="card-box" style="display: none;">
-                    <div class="card-header"><h3>Activity Log Sistem</h3></div>
+                    <div class="card-header"><h3>Audit Trail Ledger</h3></div>
                     <div class="table-responsive">
                         <table class="modern-table">
-                            <thead><tr><th>Waktu</th><th>Aktivitas Cloud</th><th>Aksi Database</th></tr></thead>
+                            <thead><tr><th>Timestamp</th><th>Operasi Node</th><th>Keterangan Transaksi</th></tr></thead>
                             <tbody id="logTableBody">
-                                <tr><td colspan="3" style="text-align:center; color:#8c6a5e;">Memuat riwayat log pribadi Anda...</td></tr>
+                                <tr><td colspan="3" style="text-align:center; color:#ffb3c1;">Memuat riwayat log pribadi Anda...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
                 <div id="tab-profile" class="card-box" style="display: none;">
-                    <div class="card-header"><h3><i class="fa-solid fa-id-card"></i> Informasi Node Pengguna</h3></div>
+                    <div class="card-header"><h3><i class="fa-solid fa-id-card"></i> Identitas Node Aktif</h3></div>
                     <div class="form-group">
-                        <label>Identitas Username Pengguna:</label>
+                        <label>Username Terdaftar:</label>
                         <input type="text" id="profileUsername" class="profile-readonly-input" readonly>
                     </div>
                     <div class="form-group">
@@ -525,17 +200,23 @@
         let currentSelectedFile = null;
 
         function fillDemoAccount() {
-            document.getElementById('authUsername').value = "fatma_ulfiana";
+            document.getElementById('authUsername').value = "hauzatul_aina";
             document.getElementById('authPassword').value = "bebas123";
             document.getElementById('authSystemToken').value = "UAS-RAHASIA-2026";
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('sidebar-panel').classList.toggle('open');
-            document.getElementById('sidebar-overlay').classList.toggle('open');
+        function toggleTokenModal() {
+            const box = document.getElementById('token-display-box');
+            box.style.display = (box.style.display === 'none') ? 'flex' : 'none';
         }
 
-        // LOGIKA TRIPLE ACCESS DENGAN BEBAS MASUK PERTAMA KALI
+        function copyTokenToClipboard() {
+            const tokenText = document.getElementById('system-token-text').innerText;
+            navigator.clipboard.writeText(tokenText).then(() => {
+                alert("⭐ Token '" + tokenText + "' berhasil disalin ke papan klip!");
+            });
+        }
+
         function validateTripleAuth() {
             const usernameInput = document.getElementById('authUsername').value.trim();
             const passwordInput = document.getElementById('authPassword').value.trim();
@@ -543,26 +224,23 @@
             const errorElement = document.getElementById('auth-error-msg');
 
             if (!usernameInput || !passwordInput || !tokenInput) {
-                errorElement.innerText = "Semua kolom (Username, Password, Token) wajib diisi!";
+                errorElement.innerText = "Semua kolom wajib terisi!";
                 errorElement.style.display = "block";
                 return;
             }
 
-            // Memeriksa pemblokiran hanya dari sisi Token Akses Kelas
             if (tokenInput !== "UAS-RAHASIA-2026") {
-                errorElement.innerText = "Token Sistem tidak valid! Akses ditolak.";
+                errorElement.innerText = "Token Sistem tidak valid! Hak masuk ditolak.";
                 errorElement.style.display = "block";
                 return;
             }
 
-            // Sukses Masuk
             loggedInUser = usernameInput;
             errorElement.style.display = "none";
             
             document.getElementById('auth-page').style.display = 'none';
             document.getElementById('main-dashboard').style.display = 'flex';
             
-            // Sinkronisasi Username ke Header, Log, dan Profile secara Dinamis
             document.getElementById('dashboardDisplayUsername').innerText = loggedInUser;
             document.getElementById('profileUsername').value = loggedInUser;
             document.getElementById('avatarLetter').innerText = loggedInUser.charAt(0).toUpperCase();
@@ -571,27 +249,12 @@
             switchTab('dashboard');
         }
 
-        function arrayBufferToLinks(arrayBuffer) {
-            const i8a = new Uint8Array(arrayBuffer);
-            const a = [];
-            for (let i = 0; i < i8a.length; i += 4) {
-                a.push((i8a[i] << 24) | (i8a[i + 1] << 16) | (i8a[i + 2] << 8) | i8a[i + 3]);
-            }
-            return CryptoJS.lib.WordArray.create(a, i8a.length);
+        function toggleMobileMenu() {
+            document.getElementById('sidebar-panel').classList.toggle('open');
+            document.getElementById('sidebar-overlay').classList.toggle('open');
         }
 
-        function wordArrayToByteArray(wordArray) {
-            const words = wordArray.words;
-            const sigBytes = wordArray.sigBytes;
-            const u8 = new Uint8Array(sigBytes);
-            let c = 0;
-            for (let i = 0; i < sigBytes; i++) {
-                const byte = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
-                u8[c++] = byte;
-            }
-            return u8;
-        }
-
+        // SISTEM ENKRIPSI AMAN BERBASIS BASE64 (MENCEGAH KERUSAKAN FILE)
         function encryptAndUpload() {
             const fileInput = document.getElementById('fileInput');
             const secretKey = document.getElementById('secretKey').value;
@@ -606,17 +269,18 @@
             const file = fileInput.files[0];
             uploadBtn.disabled = true;
             statusDiv.style.display = "block";
-            statusDiv.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Memproses enkripsi biner AES-256 berkas...";
+            statusDiv.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Menjalankan enkripsi enklaf AES-256...";
 
             const reader = new FileReader();
             reader.onload = async function(e) {
-                const arrayBuffer = e.target.result;
-                const wordArray = arrayBufferToLinks(arrayBuffer);
-                const encryptedData = CryptoJS.AES.encrypt(wordArray, secretKey).toString();
+                const rawData = e.target.result; // Data string Base64 murni dari file
+                
+                // Enkripsi string Base64 dengan aman menggunakan AES
+                const encryptedData = CryptoJS.AES.encrypt(rawData, secretKey).toString();
                 const blob = new Blob([encryptedData], {type: "text/plain"});
                 
                 const encryptedFileName = Date.now() + "_" + file.name + ".enc";
-                statusDiv.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Mengirim berkas biner ke Cloud Storage...";
+                statusDiv.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Menstransfer bit biner ke Storage Cloud...";
 
                 const { error: storageError } = await sbClient.storage
                     .from('web_keamanan')
@@ -628,7 +292,7 @@
                     return;
                 }
 
-                statusDiv.innerHTML = "<i class='fa-solid fa-database'></i> Mencatat hak milik akun ke database...";
+                statusDiv.innerHTML = "<i class='fa-solid fa-database'></i> Mengunci metadata hak akses pengguna...";
                 const generatedToken = "TOK-" + Math.floor(100000 + Math.random() * 900000);
 
                 const { error: dbError } = await sbClient
@@ -644,16 +308,65 @@
                     alert("Database Error: " + dbError.message);
                 } else {
                     statusDiv.innerHTML = `<div class='alert-success-box'>
-                        <strong><i class='fa-solid fa-circle-check'></i> Upload Sukses Terisolasi!</strong><br>
+                        <strong><i class='fa-solid fa-circle-check'></i> Proteksi Berhasil Terisolasi!</strong><br>
                         Token Berkas Baru Anda: <code>${generatedToken}</code><br>
-                        <small>File ini hanya diizinkan muncul pada akun: <strong>@${loggedInUser}</strong>.</small>
+                        <small>Hanya dapat diakses oleh akun aktif Anda.</small>
                     </div>`;
                     fileInput.value = '';
                     document.getElementById('secretKey').value = '';
                 }
                 uploadBtn.disabled = false;
             };
-            reader.readAsArrayBuffer(file);
+            reader.readAsDataURL(file); // Konversi otomatis semua tipe data file ke Base64
+        }
+
+        // SISTEM DEKRIPSI AMAN BERBASIS BASE64 (FILE TIDAK AKAN CORRUPT)
+        function downloadAndDecrypt() {
+            const inputToken = document.getElementById('inputAccessToken').value.trim();
+            const secretKey = document.getElementById('decryptSecretKey').value;
+
+            if (!currentSelectedFile) {
+                alert("Pilih file terlebih dahulu di menu My Files!");
+                return;
+            }
+            if (!inputToken || !secretKey) {
+                alert("Isi token database dan sandi dekripsi AES!");
+                return;
+            }
+
+            if (inputToken !== currentSelectedFile.access_token) {
+                alert("Akses Ditolak! Sinkronisasi metadata gagal.");
+                return;
+            }
+
+            const { data: urlData } = sbClient.storage.from('web_keamanan').getPublicUrl(currentSelectedFile.storage_path);
+
+            fetch(urlData.publicUrl)
+                .then(res => res.text())
+                .then(ciphertext => {
+                    try {
+                        const decrypted = CryptoJS.AES.decrypt(ciphertext, secretKey);
+                        const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
+                        
+                        if (!decryptedStr || !decryptedStr.includes("data:")) throw new Error();
+
+                        // Konversi kembali string Base64 yang valid ke Blob aslinya
+                        fetch(decryptedStr)
+                            .then(res => res.blob())
+                            .then(blob => {
+                                const link = document.createElement("a");
+                                link.href = URL.createObjectURL(blob);
+                                link.download = currentSelectedFile.file_name;
+                                link.click();
+                                
+                                alert("Validasi Sukses & File Anda Berhasil Didekripsi!");
+                                document.getElementById('inputAccessToken').value = "";
+                                document.getElementById('decryptSecretKey').value = "";
+                            });
+                    } catch (e) {
+                        alert("Token Valid, namun Kunci AES Salah atau File Korup!");
+                    }
+                }).catch(() => alert("Gagal mengambil berkas dari storage."));
         }
 
         async function fetchFileList() {
@@ -668,7 +381,7 @@
                 .order('uploaded_at', { ascending: false });
 
             if (error) {
-                fileTable.innerHTML = `<tr><td colspan="3">Gagal sinkronisasi data cloud.</td></tr>`;
+                fileTable.innerHTML = `<tr><td colspan="3">Gagal sinkronisasi awan.</td></tr>`;
                 return;
             }
 
@@ -677,8 +390,8 @@
             logBody.innerHTML = "";
 
             if (data.length === 0) {
-                fileTable.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#8c6a5e;">Belum ada berkas terproteksi milik Anda.</td></tr>`;
-                logBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#8c6a5e;">Riwayat log kosong.</td></tr>`;
+                fileTable.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#ffb3c1;">Belum ada berkas terproteksi milik Anda.</td></tr>`;
+                logBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#ffb3c1;">Riwayat log kosong.</td></tr>`;
                 return;
             }
 
@@ -687,10 +400,68 @@
                 trFile.innerHTML = `
                     <td>
                         <div style="display:flex; align-items:center; gap:10px; text-align:left;">
-                            <i class="fa-solid fa-file-shield" style="color:#e56b6f; font-size:16px;"></i>
-                            <div><strong>${item.file_name}</strong><br><small style="color:#8c6a5e;">Owner: @${item.username}</small></div>
+                            <i class="fa-solid fa-file-shield" style="color:#ffb3c1; font-size:16px;"></i>
+                            <div><strong>${item.file_name}</strong><br><small style="color:#ffb3c1; opacity:0.8;">Jalur Akun: @${item.username}</small></div>
                         </div>
                     </td>
-                    <td><span class="badge-status">AES Encrypted</span></td>
+                    <td><span class="badge-status">AES SECURE</span></td>
                     <td>
-                        <button class="btn-copy" title="Proses Dek
+                        <button class="btn-copy" title="Proses Dekripsi" onclick="selectForDecrypt('${item.id}')"><i class="fa-solid fa-unlock"></i> Eksekusi</button>
+                    </td>
+                `;
+                fileTable.appendChild(trFile);
+
+                const trLog = document.createElement('tr');
+                const jam = new Date(item.uploaded_at).toLocaleTimeString('id-ID');
+                trLog.innerHTML = `
+                    <td>${jam}</td>
+                    <td><span style="color:#ffb3c1; font-weight:700;">COMMIT (UPLOAD)</span></td>
+                    <td>Token ${item.access_token} locked inside secure node space for @${item.username}</td>
+                `;
+                logBody.appendChild(trLog);
+            });
+        }
+
+        async function selectForDecrypt(id) {
+            const { data } = await sbClient.from('file_metadata').select('*').eq('id', id).single();
+            if(data) {
+                currentSelectedFile = data;
+                document.getElementById('selectedFileName').innerText = data.file_name;
+                document.getElementById('inputAccessToken').value = data.access_token;
+                switchTab('token');
+            }
+        }
+
+        function resetUploadUI() {
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('uploadStatus').style.display = "none";
+        }
+
+        function switchTab(tabId) {
+            const tabs = ['dashboard', 'myfiles', 'upload', 'token', 'logs', 'profile'];
+            tabs.forEach(t => {
+                document.getElementById('tab-' + t).style.display = (t === tabId) ? 'block' : 'none';
+                document.getElementById('menu-' + t).className = (t === tabId) ? 'active' : '';
+            });
+            
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar-panel').classList.remove('open');
+                document.getElementById('sidebar-overlay').classList.remove('open');
+            }
+
+            if(tabId === 'myfiles' || tabId === 'dashboard' || tabId === 'logs') {
+                fetchFileList();
+            }
+        }
+
+        function logout() {
+            loggedInUser = "";
+            document.getElementById('main-dashboard').style.display = 'none';
+            document.getElementById('auth-page').style.display = 'flex';
+            document.getElementById('authUsername').value = '';
+            document.getElementById('authPassword').value = '';
+            document.getElementById('authSystemToken').value = '';
+        }
+    </script>
+</body>
+</html>
