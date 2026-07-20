@@ -254,7 +254,6 @@
             document.getElementById('sidebar-overlay').classList.toggle('open');
         }
 
-        // SISTEM ENKRIPSI AMAN BERBASIS BASE64 (MENCEGAH KERUSAKAN FILE)
         function encryptAndUpload() {
             const fileInput = document.getElementById('fileInput');
             const secretKey = document.getElementById('secretKey').value;
@@ -273,9 +272,9 @@
 
             const reader = new FileReader();
             reader.onload = async function(e) {
-                const rawData = e.target.result; // Data string Base64 murni dari file
+                const rawData = e.target.result; 
                 
-                // Enkripsi string Base64 dengan aman menggunakan AES
+              
                 const encryptedData = CryptoJS.AES.encrypt(rawData, secretKey).toString();
                 const blob = new Blob([encryptedData], {type: "text/plain"});
                 
@@ -317,10 +316,10 @@
                 }
                 uploadBtn.disabled = false;
             };
-            reader.readAsDataURL(file); // Konversi otomatis semua tipe data file ke Base64
+            reader.readAsDataURL(file); 
         }
 
-        // SISTEM DEKRIPSI AMAN BERBASIS BASE64 (FILE TIDAK AKAN CORRUPT)
+     
         function downloadAndDecrypt() {
             const inputToken = document.getElementById('inputAccessToken').value.trim();
             const secretKey = document.getElementById('decryptSecretKey').value;
@@ -350,7 +349,7 @@
                         
                         if (!decryptedStr || !decryptedStr.includes("data:")) throw new Error();
 
-                        // Konversi kembali string Base64 yang valid ke Blob aslinya
+                      
                         fetch(decryptedStr)
                             .then(res => res.blob())
                             .then(blob => {
